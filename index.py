@@ -49,10 +49,10 @@ def Analize():
 
 @app.route('/Analizing', methods=['POST'])
 def Analizing():
-    analedline=analizer.linechk(request.form["data"])
-    print(analedline)
-    for i in analedline:
-	print(i.time,"  ", i.user,"  ", i.data)
+    analedline, people=analizer.linechk(request.form["data"])
+    print people
+    for i in people.keys():
+	print(people[i].name+" "+str(people[i].ynum)+" "+str(people[i].cnum))
     return request.form["data"]
 
 if __name__ == '__main__':
