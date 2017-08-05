@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h2>{{ title }}.</h2>
+
+{% for name in people.keys()}
+<p>{{people[name].name}} 대화수:{{people[name].cnum}} 욕수:{{people[name].ynum}} </p>
+{% endfor %}
+
+{% endblock %}
