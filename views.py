@@ -36,7 +36,15 @@ def about():
         message='Description & Usage'
     )
 
-
+@app.route('/Analize')
+def Analize():
+    """Renders the contact page."""
+    return render_template(
+        'Analize.html',
+        title='Analize',
+        year=datetime.now().year,
+        message='이곳에 텍스트를 붙여 넣은 뒤 버튼을 클릭하세요.'
+    )
 
 if __name__ == '__main__':
      app.run(host='0.0.0.0')
