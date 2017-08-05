@@ -53,7 +53,13 @@ def Analizing():
     print people
     for i in people.keys():
 	print(people[i].name+" "+str(people[i].ynum)+" "+str(people[i].cnum))
-    return request.form["data"]
+    return render_template(
+	'result.html', 
+	title='Result', 
+	year=datetime.now().year,
+	people=people
+    )
+
 
 if __name__ == '__main__':
      app.run(host='0.0.0.0')

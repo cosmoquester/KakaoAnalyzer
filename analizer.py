@@ -80,9 +80,10 @@ def linechk(lines):
         if len(element)==6 and (element[0] and element[5] == "---------------") and element[1][4]==u'년' :
             day= element[1][0:4]+element[2][:-1].zfill(2)+element[3][:-1].zfill(2)
             continue
-        if ((element[0][0] or element[1][0]) !='[') or ((element[0][-1] or element[2][-1]) != ']' ) :
+        if element[0][0] !=u'[' or element[1][0] !=u'[' or element[0][-1] != u']' or element[2][-1] != u']' :
             continue
         add=0
+	print(element[1])
         if element[1][2]==u'후':
             add=12
         time=str(int(element[2].split(':')[0])+add).zfill(2)+element[2][-3:-1]
