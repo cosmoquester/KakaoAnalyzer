@@ -53,6 +53,8 @@ def Analizing():
     print people
     for i in people.keys():
 	print(people[i].name+" "+str(people[i].ynum)+" "+str(people[i].cnum))
+	for j in people[i].yorknums:
+	    print "   "+analedline[j].data
     return render_template(
 	'result.html', 
 	title='Result', 

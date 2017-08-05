@@ -46,7 +46,11 @@ class User:
         
     def addline(self, idx, line):
         self.linenums.append(idx)
-        words=line 
+        words=line
+	for x in york:
+	    if x in line:
+		self.add(x, "y")
+		self.yorknums.append(idx)
         for i in [',', '.', ':', ';', '~', '?', '!', '/', '(', ')', '^', '<', '>']: #어절 분리하기
             words.replace(i, ' ')
         words=words.split()
@@ -56,9 +60,9 @@ class User:
             elif words[j][-1] in [u'은', u'는', u'이', u'가', u'을', u'를', u'께', u'의', u'고']:
                 words[j]=words[j][:-1]
         for word in words:
-            if word in york:
-                self.add(word, "y")
-                self.yorknums.append(idx)
+            #if word in york:
+                #self.add(word, "y")
+                #self.yorknums.append(idx)
             self.add(word)
             
     def getynum(self):
@@ -83,7 +87,6 @@ def linechk(lines):
         if element[0][0] !=u'[' or element[1][0] !=u'[' or element[0][-1] != u']' or element[2][-1] != u']' :
             continue
         add=0
-	print(element[1])
         if element[1][2]==u'후':
             add=12
         time=str(int(element[2].split(':')[0])+add).zfill(2)+element[2][-3:-1]
@@ -104,4 +107,6 @@ def peoplechk(lines):
     for name in names:
         people[name].cnum=len(people[name].linenums)
         people[name].ynum=people[name].getynum()
+	people[name].yorknums=list(set(people[name].yorknums))
+	people[name].yorknums.sort()
     return people
