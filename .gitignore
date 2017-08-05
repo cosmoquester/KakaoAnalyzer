@@ -3,3 +3,9 @@
 ################################################################################
 
 /obj/Debug
+/bin
+/.vs/KakaoAnal/v14
+/web.debug.config
+/web.config
+/KakaoAnal.sln
+/KakaoAnal.pyproj
