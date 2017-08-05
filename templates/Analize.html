@@ -7,8 +7,12 @@
 <br>
 <p>사용법</p>
 
-<textarea name="submit" wrap="VIRTUAL" style="width:1000px; height:400px; color:white; overflow-y:scroll; resize:none; border:0;background:#2E9AFE;">이곳에 붙여넣어 주세요!</textarea>
-<br><br>
-<button type=button class='button' style="font-family:'Malgun Gothic';">분석하기</button>
-
+<form action="{{url_for('Analizing')}}" id="textform" method="post">
+	<textarea name="data" wrap="VIRTUAL" style="width:1000px; height:400px; color:white; overflow-y:scroll; 
+	resize:none; border:0;background:#2E9AFE;">이곳에 붙여넣어 주세요!</textarea>
+	<br><br>
+	<button class='button' style="font-family:'Malgun Gothic';">분석하기</button>
+</form>
 {% endblock %}
+
+

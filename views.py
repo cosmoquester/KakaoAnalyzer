@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*-
 
 from datetime import datetime
-from flask import render_template, Flask
+from flask import render_template, Flask, request
 
 app = Flask(__name__)
 
@@ -45,6 +45,11 @@ def Analize():
         year=datetime.now().year,
         message='Copy, Paste And Click Button!'
     )
+
+@app.route('/Analizing', methods=['POST'])
+def Analizing():
+    data=request.form["data"].split('\n')
+    return request.form["data"]
 
 if __name__ == '__main__':
      app.run(host='0.0.0.0')
