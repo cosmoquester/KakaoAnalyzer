@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h2>{{ title }}.</h2>
+<h3>{{ message }}</h3>
+{{ all=0 }}
+{{names=sorted(people.keys(),key=User.usort(User))}}
+{% for one in names %}
+{% all+=people[one].cnum %}
+{% endfor %}
+<table>
+    <tr>
+        <th>순위</th>
+        <th>이름</th>
+        <th>대화 점유율</th>
+        <th>대화 수</th>
+    </tr>
+    {{ cnt=0 }}
+    {% for name in names %}
+    
+    <tr>
+        <th>{{cnt}}</th>
+        <th>{{name}}</th>
+        <th>{{people[name].cnum / all}}</th>
+        <th>{{people[name].cnum}}</th>
+    </tr>
+    {{ cnt+=1 }}
+    {% endfor %}
+</table>
+
+{% endblock %}
