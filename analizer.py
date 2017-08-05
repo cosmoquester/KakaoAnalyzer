@@ -43,6 +43,15 @@ class User:
                 self.words[thing]+=1
             else:
                 self.words[thing]=1
+
+    def usort(self, crt="c"):
+	def sort_c(self):
+	    return self.cnum
+	def sort_y(self):
+	    return self.ynum
+	if crt=="y":
+	    return sort_y
+	return sort_x
         
     def addline(self, idx, line):
         self.linenums.append(idx)
