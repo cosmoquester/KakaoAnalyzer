@@ -43,7 +43,7 @@ def Analize():
         'Analize.html',
         title='Analize',
         year=datetime.now().year,
-        message='이곳에 텍스트를 붙여 넣은 뒤 버튼을 클릭하세요.'
+        message='Copy, Paste And Click Button!'
     )
 
 if __name__ == '__main__':
