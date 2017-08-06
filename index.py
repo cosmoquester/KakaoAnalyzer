@@ -17,10 +17,6 @@ def home():
         year=datetime.now().year,
     )
 
-@app.route('/googlef0773afd984a5b67.html')
-def google():
-    return render_template('googlef0773afd984a5b67.html')
-
 @app.route('/contact')
 def contact():
     """Renders the contact page."""
@@ -81,4 +77,4 @@ def Analizing():
 
 
 if __name__ == '__main__':
-     app.run(host='0.0.0.0')
+     app.run(host='0.0.0.0', port=5000)
