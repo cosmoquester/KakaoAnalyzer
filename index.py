@@ -4,7 +4,7 @@ from datetime import datetime
 from flask import render_template, Flask, request
 import analizer
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path = "/static", static_folder = "static")
 
 
 @app.route('/')
