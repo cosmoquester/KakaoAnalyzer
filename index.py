@@ -37,6 +37,7 @@ def about():
         message='Description & Usage'
     )
 
+
 @app.route('/Analize')
 def Analize():
     """Renders the contact page."""
@@ -64,15 +65,15 @@ def Analizing():
     while len(colors)<len(names):
 	colors.append('#000000')
     return render_template(
-	'result_cnum.html', 
+	'result.html', 
 	title='Result', 
 	year=datetime.now().year,
 	people=people,
-	message="Thanks",
 	names=names,
 	ynames=ynames,
 	set=zip(values, names, colors),
 	set_y=zip(values_y, ynames, colors),
+	lines=analedline,
     )
 
 

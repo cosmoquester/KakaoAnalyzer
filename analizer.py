@@ -18,9 +18,14 @@ york=york1+york2+york3+york4+york5+york6+york7+york8+york9+york10+york11+york12+
 
 class Line:
     def __init__(self, time, user, data):
-        self.time=time
+        self.times=time
         self.user=user
         self.data=data
+
+    def septimes(self):
+	self.day=str(self.times[:4])+u"년 "+str(int(self.times[4:6]))+u"월 "+str(int(self.times[6:8]))+u"일"
+	self.time=self.times[8:10]+":"+self.times[10:]
+	return self
 
 class User:
     def __init__(self, name):
@@ -29,6 +34,8 @@ class User:
         self.yorknums=[]
         self.words={}
         self.yorks={}
+	self.words_=[]
+	self.yorks_=[]
 	self.cnum=0
 	self.ynum=0
     def __self__(self):
@@ -70,6 +77,10 @@ class User:
         for i in self.yorks.keys():
             ynum+=self.yorks[i]
         return ynum
+
+    def make_data(self):
+	self.words_=sorted(self.words.items(), key=lambda x:x[1], reverse=True)
+	self.yorks_=sorted(self.yorks.items(), key=lambda x:x[1], reverse=True)
                 
 
 
@@ -90,7 +101,7 @@ def linechk(lines):
         if element[1][2]==u'후':
             add=12
         time=str(int(element[2].split(':')[0])+add).zfill(2)+element[2][-3:-1]
-        analized_line.append(Line(day+time, element[0][1:-1], " ".join(element[3:])))
+        analized_line.append(Line(day+time, element[0][1:-1], " ".join(element[3:])).septimes())
     return analized_line, peoplechk(analized_line)
 
 
@@ -107,6 +118,6 @@ def peoplechk(lines):
     for name in names:
         people[name].cnum=len(people[name].linenums)
         people[name].ynum=people[name].getynum()
-	people[name].yorknums=list(set(people[name].yorknums))
-	people[name].yorknums.sort()
+	people[name].yorknums=sorted(list(set(people[name].yorknums)))
+	people[name].make_data()
     return people

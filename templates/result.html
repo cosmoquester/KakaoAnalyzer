@@ -2,10 +2,164 @@
 
 {% block content %}
 
+<script src='static/Chart.js'></script>
 <h2>{{ title }}.</h2>
-
-{% for name in people.keys() %}
-<p>{{people[name].name}} 대화수:{{people[name].cnum}} 욕수:{{people[name].ynum}} </p>
+<div id="main" style=display:block>
+<div style="width:50%;float:left;height:{{25*(names|length)+5}}px;">
+{% set all=[] %}
+{% for one in names %}
+    {% if all.append(people[one].cnum) %}{% endif %}
 {% endfor %}
+
+
+{% set all=all|sum %}
+<table style="float:left;margin-right:35px">
+    <tr>
+        <th style=width:40px>순위</th>
+        <th style=width:90px>이름</th>
+        <th style=width:80px>대화점유율</th>
+        <th>대화수</th>
+    </tr>
+    {% set cnt=[] %}
+    {% for name in names %}
+    
+    <tr onclick="javascript:view_p('{{name}}')" onmouseover="this.style.color='#9A2EFE'" onmouseout="this.style.color='black'">
+        <td>{{cnt|length + 1}}</th>
+        <td>{{name}}</th>
+        <td>{{'{:.2f}%'.format(people[name].cnum / all * 100|float)}}</th>
+        <td>{{people[name].cnum}}</th>
+    </tr>
+    {% if cnt.append(0) %}{% endif %}
+    {% endfor %}
+</table>
+
+<table style=flaot:right>
+    <tr>
+        <th style=width:50px>욕순위</th>
+        <th style=width:90px>이름</th>
+        <th style=width:50px>욕비율</th>
+        <th style=width:50px>욕횟수</th>
+	<th style=width:44px>대화수</th>
+    </tr>
+    {% set cnt=[] %}
+    {% for name in ynames %}
+    
+    <tr onclick="javascript:view_p('{{name}}')" onmouseover="this.style.color='#9A2EFE'" onmouseout="this.style.color='black'">
+        <td>{{cnt|length + 1}}</th>
+        <td>{{name}}</th>
+        <td>{{'{:.2f}%'.format(people[name].ynum / people[name].cnum * 100|float)}}</th>
+        <td>{{people[name].ynum}}</th>
+        <td>{{people[name].cnum}}</th>
+    </tr>
+    {% if cnt.append(0) %}{% endif %}
+    {% endfor %}
+</table></div>
+<div style="width:40%;float:right;"><p><b>대화수<b></p>
+<canvas id="chart" width="500" height="400" style=flaot:right></canvas><br><p>욕수</p>
+<canvas id="chart2" width="500" height="400" style=flaot:right></canvas></div></div>
+
+
+{% for name in names %}
+<div id="{{name}}" style=display:none onclick="javascript:view_n('{{name}}')" >
+{{name}}<br>
+대화수: {{people[name].cnum}}회&nbsp;&nbsp;&nbsp;대화점유율: {{'{:.2f}%'.format(people[name].cnum / all * 100|float)}}&nbsp;&nbsp;&nbsp;욕을한 횟수:{{people[name].ynum}}&nbsp;&nbsp;&nbsp;대화 중 욕의 비율: {{'{:.2f}%'.format(people[name].ynum / people[name].cnum * 100|float)}}<br><br><br>
+<table style="float:left;margin-right:45px">
+    <caption>단어 사용 빈도</caption>
+    {% set cnt=[0] %}
+    {% for i in people[name].words_[:30] %}
+    <tr>
+	<td style=width:30px>{{cnt|length}}</td>
+	<td style=width:80px>{{i[0]}}</td>
+	<td>{{i[1]}}</td>
+    </tr>
+    {% if cnt.append(0) %}{% endif %}
+    {% endfor %}
+</table>
+{% if people[name].ynum>0 %}
+<table style="float:left;margin-right:45px">
+    <caption>욕 사용 빈도</caption>
+    {% set cnt=[0] %}
+    {% for i in people[name].yorks_ %}
+    <tr>
+	<td style=width:30px>{{cnt|length}}</td>
+	<td style=width:80px>{{i[0]}}</td>
+	<td>{{i[1]}}</td>
+    </tr>
+    {% if cnt.append(0) %}{% endif %}
+    {% endfor %}
+</table>
+
+<table>
+    <caption>욕을 사용한 문장들</caption>
+    {% set used=[] %}
+    {% for i in people[name].yorknums %}
+    <tr>
+	<td style=width:120px>{% if lines[i].day not in used %}{{lines[i].day}}{% if used.append(lines[i].day) %}{% endif %}{% endif %}</td>
+	<td style=width:60px>{{lines[i].time}}</td>
+	<td >{{lines[i].data}}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+</div>
+
+{% endfor %}
+
+
+<div style=clear:both></div>
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+   var key=0
+   var pieData = [
+            {% for item,label,colors in set %}
+                {
+                    value: {{item}},
+                    label: "{{label}}",
+                    color : "{{colors}}"
+                },
+                {% endfor %}
+ 
+ 
+         ];
+ 
+   var pieData2 = [
+            {% for item,label,colors in set_y %}
+                {
+                    value: {{item}},
+                    label: "{{label}}",
+                    color : "{{colors}}"
+                },
+                {% endfor %}
+ 
+ 
+         ];
+
+   // get bar chart canvas
+   var mychart = document.getElementById("chart").getContext("2d");
+   var mychart2 = document.getElementById("chart").getContext("2d"); 
+   steps = 10
+   max = 10
+   // draw pie chart
+   new Chart(document.getElementById("chart").getContext("2d")).Pie(pieData);
+   new Chart(document.getElementById("chart2").getContext("2d")).Pie(pieData2);
+
+function view_p(name)
+{
+	document.getElementById("main").style.display = "none";
+	document.getElementById(name).style.display = "block";
+}
+
+function view_n(name)
+{
+	document.getElementById(name).style.display = "none";
+	document.getElementById("main").style.display = "block";
+}
+
+	
+</script>
+
 
 {% endblock %}

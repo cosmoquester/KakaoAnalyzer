@@ -6,7 +6,7 @@
 <h2>{{ title }}.</h2>
 <h3>{{ message }}</h3>
 
-<div style="width:50%;float:left;height:{{25*(names|length)+5}}px">
+<div id="main" style="width:50%;float:left;height:{{25*(names|length)+5}}px">
 {% set all=[] %}
 {% for one in names %}
     {% if all.append(people[one].cnum) %}{% endif %}
@@ -57,6 +57,12 @@
 <canvas id="chart" width="600" height="400" style=flaot:right></canvas><br><p>욕수</p>
 <canvas id="chart2" width="600" height="400" style=flaot:right></canvas>
 </div><div style="clear:both;"></div>
+
+
+{% endblock %}
+
+{% block scripts %}
+
 <script>
    var pieData = [
             {% for item,label,colors in set %}
@@ -90,6 +96,10 @@
    // draw pie chart
    new Chart(document.getElementById("chart").getContext("2d")).Pie(pieData);
    new Chart(document.getElementById("chart2").getContext("2d")).Pie(pieData2);
+
+//document.getElementById("main").style.display = "none";
+
 </script>
+
 
 {% endblock %}
