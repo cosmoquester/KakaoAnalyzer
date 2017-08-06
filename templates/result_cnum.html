@@ -4,28 +4,29 @@
 
 <h2>{{ title }}.</h2>
 <h3>{{ message }}</h3>
-{{ all=0 }}
-{{names=sorted(people.keys(),key=User.usort(User))}}
+
+{% set all=[] %}
 {% for one in names %}
-{% all+=people[one].cnum %}
+    {% if all.append(people[one].cnum) %}{% endif %}
 {% endfor %}
+{% set all=all|sum %}
 <table>
     <tr>
         <th>순위</th>
         <th>이름</th>
-        <th>대화 점유율</th>
-        <th>대화 수</th>
+        <th>대화점유율</th>
+        <th>대화수</th>
     </tr>
-    {{ cnt=0 }}
+    {% set cnt=[] %}
     {% for name in names %}
     
     <tr>
-        <th>{{cnt}}</th>
+        <th>{{cnt|length + 1}}</th>
         <th>{{name}}</th>
-        <th>{{people[name].cnum / all}}</th>
+        <th>{{'{:.2f}%'.format(people[name].cnum / all * 100|float)}}</th>
         <th>{{people[name].cnum}}</th>
     </tr>
-    {{ cnt+=1 }}
+    {% if cnt.append(0) %}{% endif %}
     {% endfor %}
 </table>
 

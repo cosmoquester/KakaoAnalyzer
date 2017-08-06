@@ -31,6 +31,8 @@ class User:
         self.yorks={}
 	self.cnum=0
 	self.ynum=0
+    def __self__(self):
+	return self.name
  
     def add(self, thing, mode="w"):
         if mode=="y":
@@ -44,14 +46,6 @@ class User:
             else:
                 self.words[thing]=1
 
-    def usort(self, crt="c"):
-	def sort_c(self):
-	    return self.cnum
-	def sort_y(self):
-	    return self.ynum
-	if crt=="y":
-	    return sort_y
-	return sort_x
         
     def addline(self, idx, line):
         self.linenums.append(idx)
@@ -69,9 +63,6 @@ class User:
             elif words[j][-1] in [u'은', u'는', u'이', u'가', u'을', u'를', u'께', u'의', u'고']:
                 words[j]=words[j][:-1]
         for word in words:
-            #if word in york:
-                #self.add(word, "y")
-                #self.yorknums.append(idx)
             self.add(word)
             
     def getynum(self):
