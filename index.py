@@ -50,20 +50,16 @@ def Analize():
 @app.route('/Analizing', methods=['POST'])
 def Analizing():
     analedline, people=analizer.linechk(request.form["data"])
-#    print people
 #    for i in people.keys():
-#	print(people[i].name+" "+str(people[i].ynum)+" "+str(people[i].cnum))
-#	for j in people[i].yorknums:
-#	    print "   "+analedline[j].data
-    names=sorted(people.keys(),key=lambda x:people[x].cnum, reverse=True)
-    print(names)
+#	print(people[i].name+" "+str(people[i].ynum*1.0/people[i].cnum))
     return render_template(
 	'result_cnum.html', 
 	title='Result', 
 	year=datetime.now().year,
 	people=people,
 	message="Thanks",
-	names=names
+	names=sorted(people.keys(),key=lambda x:people[x].cnum, reverse=True),
+	ynames=sorted(people.keys(), key=lambda x:people[x].ynum*1.0/people[x].cnum, reverse=True),
     )
 
 
