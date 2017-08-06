@@ -2,7 +2,7 @@
 
 from datetime import datetime
 from flask import render_template, Flask, request
-import analizer
+import analyzer
 
 app = Flask(__name__, static_url_path = "/static", static_folder = "static")
 
@@ -13,7 +13,7 @@ def home():
     """Renders the home page."""
     return render_template(
         'index.html',
-        title='KakaoTalk Analizer',
+        title='KakaoTalk Analyzer',
         year=datetime.now().year,
     )
 
@@ -38,19 +38,19 @@ def about():
     )
 
 
-@app.route('/Analize')
-def Analize():
+@app.route('/Analyze')
+def Analyze():
     """Renders the contact page."""
     return render_template(
-        'Analize.html',
-        title='Analize',
+        'Analyze.html',
+        title='Analyze',
         year=datetime.now().year,
         message='Copy, Paste And Click Button!'
     )
 
-@app.route('/Analizing', methods=['POST'])
-def Analizing():
-    analedline, people=analizer.linechk(request.form["data"])
+@app.route('/Analyzing', methods=['POST'])
+def Analyzing():
+    analedline, people=analyzer.linechk(request.form["data"])
 #    for i in people.keys():
 #	print(people[i].name+" "+str(people[i].ynum*1.0/people[i].cnum))
     names=sorted(people.keys(),key=lambda x:people[x].cnum, reverse=True)
