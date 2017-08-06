@@ -60,7 +60,7 @@
 
 
 {% for name in names %}
-<div id="{{name}}" style=display:none onclick="javascript:view_n('{{name}}')" >
+<div id="{{name}}" style="display:none;height:{{250+21.6*people[name].words|length}}px" onclick="javascript:view_n('{{name}}')" >
 {{name}}<br>
 대화수: {{people[name].cnum}}회&nbsp;&nbsp;&nbsp;대화점유율: {{'{:.2f}%'.format(people[name].cnum / all * 100|float)}}&nbsp;&nbsp;&nbsp;욕을한 횟수:{{people[name].ynum}}&nbsp;&nbsp;&nbsp;대화 중 욕의 비율: {{'{:.2f}%'.format(people[name].ynum / people[name].cnum * 100|float)}}<br><br><br>
 <table style="float:left;margin-right:45px">
@@ -112,7 +112,6 @@
 {% block scripts %}
 
 <script>
-   var key=0
    var pieData = [
             {% for item,label,colors in set %}
                 {
@@ -157,7 +156,6 @@ function view_n(name)
 	document.getElementById(name).style.display = "none";
 	document.getElementById("main").style.display = "block";
 }
-
 	
 </script>
 
