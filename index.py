@@ -2,6 +2,7 @@
 
 from datetime import datetime
 from flask import render_template, Flask, request
+from random import shuffle
 import analyzer, codecs, time
 
 app = Flask(__name__, static_url_path = "/static", static_folder = "static")
@@ -62,9 +63,10 @@ def Analyzing():
     values_y = []
     for i in ynames:
 	values_y.append(people[i].ynum)
-    colors = [ "#F7464A", "#46BFBD", "#FDB45C", "#FEDCBA","#ABCDEF", "#DDDDDD", "#ABCABC", "#FE2EC8 ", "#01DF01 ", "#B43104 ", "#FA8258 ", "#D8F781 ", "#642EFE ", "#58FAAC ", "#00FF00 ", "#0B4C5F" ]
+    colors = [ "#58ACFA", "#46BFBD", "#FDB45C", "#FEDCBA","#0101DF", "#DDDDDD", "#FE2E9A", "#FFFF00", "#00FF00", "#FF0040", "#FA8258 ", "#D8F781 ", "#642EFE ", "#58FAAC ", "#00FF00 ", "#0B4C5F" ]
+    shuffle(colors)
     while len(colors)<len(names):
-	colors.append('#000000')
+	colors.append('#FFFFFF')
     return render_template(
 	'result.html', 
 	title='Result', 

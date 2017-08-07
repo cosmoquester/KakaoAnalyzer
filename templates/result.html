@@ -7,8 +7,10 @@
 <div id="main" style=display:block>
 <div style="min-width:55%;max-width:80%;float:left;min-height:{{25*(names|length)+5}}px;">
 {% set all=[] %}
+{% set ynumsum=[] %}
 {% for one in names %}
     {% if all.append(people[one].cnum) %}{% endif %}
+    {% if ynumsum.append(people[one].ynum) %}{% endif %}
 {% endfor %}
 
 
@@ -32,7 +34,7 @@
     {% if cnt.append(0) %}{% endif %}
     {% endfor %}
 </table>
-
+{% if ynumsum|sum > 0 %}
 <table style="min-width:294px">
     <tr>
         <th style=width:50px>욕순위</th>
@@ -54,10 +56,13 @@
     {% if cnt.append(0) %}{% endif %}
     {% endif %}
     {% endfor %}
-</table></div>
-<div style="max-width:100%;float:left"><p><b>대화수</b></p>
-<canvas id="chart" width="500" height="400" style="max-width:100%;"></canvas><br><p><b>욕수</b></p>
-<canvas id="chart2" width="500" height="400" style="max-width:100%;"></canvas></div></div>
+</table>{% endif %}</div>
+<div style="max-width:100%;float:left">
+<p><b>대화수</b></p>
+<canvas id="chart" width="500" height="400" style="max-width:100%;"></canvas><br>
+{% if ynumsum|sum>0 %}
+<p><b>욕수</b></p>
+<canvas id="chart2" width="500" height="400" style="max-width:100%;"></canvas>{% endif %}</div></div>
 
 
 {% for name in names %}
