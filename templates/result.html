@@ -43,7 +43,7 @@
     </tr>
     {% set cnt=[] %}
     {% for name in ynames %}
-    
+    {% if people[name].ynum > 0 %}
     <tr onclick="javascript:view_p('{{name}}')" onmouseover="this.style.color='#9A2EFE'" onmouseout="this.style.color='black'">
         <td>{{cnt|length + 1}}</th>
         <td>{{name}}</th>
@@ -52,6 +52,7 @@
         <td>{{people[name].cnum}}</th>
     </tr>
     {% if cnt.append(0) %}{% endif %}
+    {% endif %}
     {% endfor %}
 </table></div>
 <div style="width:40%;float:right;"><p><b>대화수<b></p>
