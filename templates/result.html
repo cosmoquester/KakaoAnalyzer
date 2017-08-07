@@ -13,7 +13,7 @@
 
 
 {% set all=all|sum %}
-<table style="float:left;margin-right:35px">
+<table style="float:left;margin-right:35px;min-width:265px">
     <tr>
         <th style=width:40px>순위</th>
         <th style=width:90px>이름</th>
@@ -33,7 +33,7 @@
     {% endfor %}
 </table>
 
-<table style=flaot:right>
+<table style="flaot:right;min-width:294px">
     <tr>
         <th style=width:50px>욕순위</th>
         <th style=width:90px>이름</th>
@@ -55,8 +55,8 @@
     {% endfor %}
 </table></div>
 <div style="width:40%;float:right;"><p><b>대화수<b></p>
-<canvas id="chart" width="500" height="400" style=flaot:right></canvas><br><p>욕수</p>
-<canvas id="chart2" width="500" height="400" style=flaot:right></canvas></div></div>
+<canvas id="chart" width="500" height="400" style="flaot:right;max-width:80%"></canvas><br><p>욕수</p>
+<canvas id="chart2" width="500" height="400" style="flaot:right;max-width:80%"></canvas></div></div>
 
 
 {% for name in names %}
