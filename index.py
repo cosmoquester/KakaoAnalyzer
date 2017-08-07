@@ -50,9 +50,7 @@ def Analyze():
 
 @app.route('/Analyzing', methods=['POST'])
 def Analyzing():
-    analedline, people=analyzer.linechk(request.form["data"])
-#    for i in people.keys():
-#	print(people[i].name+" "+str(people[i].ynum*1.0/people[i].cnum))
+    analedline, people=analyzer.linechk(request.form["data"], request.form.get('mobile'))
     names=sorted(people.keys(),key=lambda x:people[x].cnum, reverse=True)
     ynames=sorted(people.keys(), key=lambda x:people[x].ynum*1.0/people[x].cnum, reverse=True)
     values = []

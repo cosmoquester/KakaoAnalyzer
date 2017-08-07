@@ -85,26 +85,42 @@ class User:
 
 
 
-def linechk(lines):
+def linechk(lines, mobile):
     analized_line=[]
     day='00000000'
-    for line in lines.split('\n'):
-        element=line.split()
-        if len(element)<4 :
-           continue
-        if len(element)==6 and (element[0] and element[5] == "---------------") and element[1][4]==u'년' :
-            day= element[1][0:4]+element[2][:-1].zfill(2)+element[3][:-1].zfill(2)
-            continue
-	if len(element)==4 and element[0][-1]==u'년' and element[1][-1]==u'월' and element[2][-1]==u'일' and element[3][-2:]==u'요일':
-	    day=element[0][:4]+element[1][:-1].zfill(2)+element[2][:-1].zfill(2)
-	    continue
-        if element[0][0] !=u'[' or element[1][0] !=u'[' or element[0][-1] != u']' or element[2][-1] != u']' :
-            continue
-        add=0
-        if element[1][2] is u'후' and element[2][:2] is not '12':
-            add=12
-        time=str(int(element[2].split(':')[0])+add).zfill(2)+element[2][-3:-1]
-        analized_line.append(Line(day+time, element[0][1:-1], " ".join(element[3:])).septimes())
+    if not mobile:
+	for line in lines.split('\n'):
+	    element=line.split()
+	    if len(element)<4 :
+		continue
+	    if len(element)==6 and (element[0] and element[5] == "---------------") and element[1][4]==u'년' :
+		day= element[1][0:4]+element[2][:-1].zfill(2)+element[3][:-1].zfill(2)
+		continue
+	    if len(element)==4 and element[0][-1]==u'년' and element[1][-1]==u'월' and element[2][-1]==u'일' and element[3][-2:]==u'요일':
+		day=element[0][:4]+element[1][:-1].zfill(2)+element[2][:-1].zfill(2)
+		continue
+	    if element[0][0] !=u'[' or element[1][0] !=u'[' or element[0][-1] != u']' or element[2][-1] != u']' :
+		continue
+	    add=0
+	    if element[1][2] is u'후' and element[2][:2] is not '12':
+		add=12
+	    time=str(int(element[2].split(':')[0])+add).zfill(2)+element[2][-3:-1]
+	    analized_line.append(Line(day+time, element[0][1:-1], " ".join(element[3:])).septimes())
+    else:
+	for line in lines.split('\n'):
+	    element=line.split()
+	    if len(element)<6 :
+		continue
+	    if not (element[0][-1]==u'년' and element[1][-1]==u'월' and element[2][-1]==u'일' and element[3][0]==u'오' and element[4][-1]==u',' and ":" in element[6:]) :
+		continue
+	    day=element[0][:-1]+element[1][:-1].zfill(2)+element[2][:-1].zfill(2)
+	    add=0
+	    if element[3][-1]==u'후' and element[4][:2] is not '12' :
+		add=12
+	    time=str(int(element[4][:-4])+add).zfill(2)+element[4][-3:-1]
+	    cIdx=element[6:].index(':')+6
+	    analized_line.append(Line(day+time, " ".join(element[5:cIdx]), " ".join(element[cIdx+1:])).septimes())
+	    
     return analized_line, peoplechk(analized_line)
 
 
