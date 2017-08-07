@@ -65,7 +65,7 @@ class User:
             words.replace(i, ' ')
         words=words.split()
         for j in range(len(words)): #조사 분리하기
-            if len(words[j])>1 and words[j][-2:] in [u'에게', u'이다', u'에서', u'처럼', u'라고']:
+            if len(words[j])>1 and words[j][-2:] in [u'에게', u'이다', u'에서', u'처럼', u'라고', u'이가']:
                 words[j]=words[j][:-2]
             elif words[j][-1] in [u'은', u'는', u'이', u'가', u'을', u'를', u'께', u'의', u'고']:
                 words[j]=words[j][:-1]

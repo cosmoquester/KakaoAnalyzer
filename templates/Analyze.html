@@ -9,7 +9,20 @@
 
 <form action="{{url_for('Analyzing')}}" id="textform" method="post">
 	<textarea name="data" wrap="VIRTUAL" style="width:1000px; height:400px; color:white; max-width:90%; overflow-y:scroll; 
-	resize:none; border:0;background:#2E9AFE;">이곳에 붙여넣어 주세요!</textarea>
+	resize:none; border:0;background:#2E9AFE;">$SAMPLE$
+
+XYZ의 카카오톡방 님과 카카오톡 대화
+저장한 날짜 : 2017-08-05 15:43:34
+
+--------------- 2017년 5월 13일 토요일 ---------------
+[X] [오후 1:01] 반가워요. 
+[Y] [오후 1:01] what is your name?
+[Z] [오후 1:01] my name is Z.
+[X] [오후 1:01] nice to meet you Z!
+[Y] [오후 1:01] 사과는 딸기다.
+[Z] [오후 1:01] 사과는 사과지 사과가 왜 딸기?
+[X] [오후 1:01] 맞아, 사과는 맜있어!
+[Y] [오후 1:03] 딸기가 맛있어...</textarea>
 	<br>
 	<input type="checkbox" name="mobile"/> mobile에서 내보내기된 텍스트인가요?<br><br>
 	<button class='button' style="font-family:'Malgun Gothic';">분석하기</button>
