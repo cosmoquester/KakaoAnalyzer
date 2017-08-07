@@ -99,10 +99,19 @@ def linechk(lines, mobile):
 	    if len(element)==4 and element[0][-1]==u'년' and element[1][-1]==u'월' and element[2][-1]==u'일' and element[3][-2:]==u'요일':
 		day=element[0][:4]+element[1][:-1].zfill(2)+element[2][:-1].zfill(2)
 		continue
-	    if element[0][0] !=u'[' or element[1][0] !=u'[' or element[0][-1] != u']' or element[2][-1] != u']' :
+	    if not (element[0][0] == u'[' and ((u'[오전' in element) or (u'[오후' in element))):
 		continue
+	    try:
+		idx=element.index(u'[오전')
+	    except:
+		idx=element.index(u'[오후')
+	    if not (element[idx-1][-1] == ']' and element[idx+1][-1] == ']'):
+		continue
+	    element[0]=" ".join(element[:idx])
+	    for i in range(1, idx):
+		element.pop(1)
 	    add=0
-	    if element[1][2] is u'후' and element[2][:2] is not '12':
+	    if element[1][2] == u'후' and element[2][:2] != '12':
 		add=12
 	    time=str(int(element[2].split(':')[0])+add).zfill(2)+element[2][-3:-1]
 	    analized_line.append(Line(day+time, element[0][1:-1], " ".join(element[3:])).septimes())
@@ -115,7 +124,7 @@ def linechk(lines, mobile):
 		continue
 	    day=element[0][:-1]+element[1][:-1].zfill(2)+element[2][:-1].zfill(2)
 	    add=0
-	    if element[3][-1]==u'후' and element[4][:2] is not '12' :
+	    if element[3][-1]==u'후' and element[4][:2] != '12' :
 		add=12
 	    time=str(int(element[4][:-4])+add).zfill(2)+element[4][-3:-1]
 	    cIdx=element[6:].index(':')+6
