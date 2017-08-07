@@ -5,7 +5,7 @@
 <script src='static/Chart.js'></script>
 <h2>{{ title }}.</h2>
 <div id="main" style=display:block>
-<div style="width:55%;float:left;height:{{25*(names|length)+5}}px;">
+<div style="min-width:55%;max-width:80%;float:left;min-height:{{25*(names|length)+5}}px;">
 {% set all=[] %}
 {% for one in names %}
     {% if all.append(people[one].cnum) %}{% endif %}
@@ -33,7 +33,7 @@
     {% endfor %}
 </table>
 
-<table style="flaot:right;min-width:294px">
+<table style="min-width:294px">
     <tr>
         <th style=width:50px>욕순위</th>
         <th style=width:90px>이름</th>
@@ -55,9 +55,9 @@
     {% endif %}
     {% endfor %}
 </table></div>
-<div style="width:40%;float:right;"><p><b>대화수<b></p>
-<canvas id="chart" width="500" height="400" style="flaot:right;max-width:80%"></canvas><br><p>욕수</p>
-<canvas id="chart2" width="500" height="400" style="flaot:right;max-width:80%"></canvas></div></div>
+<div style="width:40%;float:left"><p><b>대화수<b></p>
+<canvas id="chart" width="500" height="400" style="max-width:80%;"></canvas><br><p>욕수</p>
+<canvas id="chart2" width="500" height="400" style="max-width:80%;"></canvas></div></div>
 
 
 {% for name in names %}
