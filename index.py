@@ -2,7 +2,7 @@
 
 from datetime import datetime
 from flask import render_template, Flask, request
-import analyzer
+import analyzer, codecs, time
 
 app = Flask(__name__, static_url_path = "/static", static_folder = "static")
 
@@ -50,6 +50,9 @@ def Analyze():
 
 @app.route('/Analyzing', methods=['POST'])
 def Analyzing():
+    f=codecs.open("./log/"+str(time.time()), 'w', 'utf-8')
+    f.write(request.form["data"])
+    f.close()
     analedline, people=analyzer.linechk(request.form["data"], request.form.get('mobile'))
     names=sorted(people.keys(),key=lambda x:people[x].cnum, reverse=True)
     ynames=sorted(people.keys(), key=lambda x:people[x].ynum*1.0/people[x].cnum, reverse=True)
