@@ -5,7 +5,7 @@
 <script src='static/Chart.js'></script>
 <h2>{{ title }}.</h2>
 <div id="main" style=display:block>
-<div style="width:50%;float:left;height:{{25*(names|length)+5}}px;">
+<div style="width:55%;float:left;height:{{25*(names|length)+5}}px;">
 {% set all=[] %}
 {% for one in names %}
     {% if all.append(people[one].cnum) %}{% endif %}
