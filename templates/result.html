@@ -24,7 +24,7 @@
     {% for name in names %}
     
     <tr onclick="javascript:view_p('{{name}}')" onmouseover="this.style.color='#9A2EFE'" onmouseout="this.style.color='black'">
-        <td>{{cnt|length + 1}}</th>
+        <td><b>{{cnt|length + 1}}</b></th>
         <td>{{name}}</th>
         <td>{{'{:.2f}%'.format(people[name].cnum / all * 100|float)}}</th>
         <td>{{people[name].cnum}}</th>
@@ -45,7 +45,7 @@
     {% for name in ynames %}
     {% if people[name].ynum > 0 %}
     <tr onclick="javascript:view_p('{{name}}')" onmouseover="this.style.color='#9A2EFE'" onmouseout="this.style.color='black'">
-        <td>{{cnt|length + 1}}</th>
+        <td><b>{{cnt|length + 1}}</b></th>
         <td>{{name}}</th>
         <td>{{'{:.2f}%'.format(people[name].ynum / people[name].cnum * 100|float)}}</th>
         <td>{{people[name].ynum}}</th>
@@ -65,11 +65,11 @@
 {{name}}<br>
 대화수: {{people[name].cnum}}회&nbsp;&nbsp;&nbsp;대화점유율: {{'{:.2f}%'.format(people[name].cnum / all * 100|float)}}&nbsp;&nbsp;&nbsp;욕을한 횟수:{{people[name].ynum}}&nbsp;&nbsp;&nbsp;대화 중 욕의 비율: {{'{:.2f}%'.format(people[name].ynum / people[name].cnum * 100|float)}}<br><br><br>
 <table style="float:left;margin-right:45px">
-    <caption>단어 사용 빈도</caption>
+    <caption><b>단어 사용 빈도</b></caption>
     {% set cnt=[0] %}
     {% for i in people[name].words_[:30] %}
     <tr>
-	<td style=width:30px>{{cnt|length}}</td>
+	<td style=width:30px><b>{{cnt|length}}</b></td>
 	<td style=width:80px>{{i[0]}}</td>
 	<td>{{i[1]}}</td>
     </tr>
@@ -78,11 +78,11 @@
 </table>
 {% if people[name].ynum>0 %}
 <table style="float:left;margin-right:45px">
-    <caption>욕 사용 빈도</caption>
+    <caption><b>욕 사용 빈도</b></caption>
     {% set cnt=[0] %}
     {% for i in people[name].yorks_ %}
     <tr>
-	<td style=width:30px>{{cnt|length}}</td>
+	<td style=width:30px><b>{{cnt|length}}</b></td>
 	<td style=width:80px>{{i[0]}}</td>
 	<td>{{i[1]}}</td>
     </tr>
@@ -91,7 +91,7 @@
 </table>
 
 <table style=float:left>
-    <caption>욕을 사용한 문장들</caption>
+    <caption><b>욕을 사용한 문장들<b></caption>
     {% set used=[] %}
     {% for i in people[name].yorknums %}
     <tr>
