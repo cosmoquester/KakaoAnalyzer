@@ -5,7 +5,7 @@
 <h2>{{ title }}.</h2>
 <h3>{{ message }}</h3>
 <br>
-<p>사용법</p>
+<a href="{{url_for('about')}}">사용법 Click!</a> <p style=color:red> 사용법을 꼭 참조하시고 뒤로가기는 사용하실 필요 없습니다!</p>
 
 <form action="{{url_for('Analyzing')}}" id="textform" method="post">
 	<textarea name="data" wrap="VIRTUAL" style="width:1000px; height:400px; color:white; max-width:90%; overflow-y:scroll; 
