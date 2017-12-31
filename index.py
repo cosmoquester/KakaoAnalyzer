@@ -1,5 +1,7 @@
 #-*- coding: utf-8 -*-
 
+
+
 from datetime import datetime
 from flask import render_template, Flask, request
 from random import shuffle
@@ -51,7 +53,7 @@ def Analyze():
 
 @app.route('/Analyzing', methods=['POST'])
 def Analyzing():
-    f=codecs.open("./log/"+str(time.time()), 'w', 'utf-8')
+    f=codecs.open("./log/"+str(time.time())+'.txt', 'w', 'utf-8')
     f.write(request.form["data"])
     f.close()
     analedline, people=analyzer.linechk(request.form["data"], request.form.get('mobile'))
