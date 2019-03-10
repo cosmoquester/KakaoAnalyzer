@@ -29,7 +29,7 @@ def Analize(data_in, line_num=None):
             if chatname:
                 mobile = True
     chatroom = Chatroom(chatname)
-    print(mobile)
+
     # Regular Expressions
     if mobile:
         datetime_exp = compile('(?P<year>\d{4})년 (?P<month>\d{1,2})월 (?P<day>\d{1,2})일 .. \d{1,2}:\d{2}\r?\n?$')
