@@ -8,9 +8,6 @@ class Chatroom:
         self.people = []
         self.words = []
 
-    def append(self, msgs):
-        self._Msgs.append(msgs)
-
     def __len__(self):
         return len(self._Msgs)
     
@@ -34,3 +31,10 @@ class Chatroom:
                 ret += 'Message'
 
         return ret
+
+    def append(self, datetime, person_name, content):
+        # self._Msgs.append(msgs)
+        try:
+            print(datetime.strftime('%y/%m/%d %H:%M:%S'), person_name, content)
+        except UnicodeEncodeError as e:
+            print(e)
