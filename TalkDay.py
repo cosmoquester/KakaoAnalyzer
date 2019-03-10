@@ -14,6 +14,13 @@ class TalkDay(date):
 
     def get_chatrooms(self):
         return [x.chatroom for x in self.Msgss]
+    
+    def get_Msg(self, chatroom):
+        for msg in self.Msgss:
+            if msg.chatroom == chatroom:
+                return msg
+        else:
+            return None
 
     def append(self, chatroom, msg):
 

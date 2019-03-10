@@ -40,7 +40,7 @@ class Word:
         if type(other)==Word: other = other.name
         return self.name >= other
     
-    def get(talkday=None, person=None, chatroom=None):
+    def get(self, talkday=None, person=None, chatroom=None):
         '''
         You can bring Word history using 'get' mothod.
         It returns Messages by iterator according to named parameter person or talkday.
@@ -51,7 +51,7 @@ class Word:
                 (not chatroom or c is chatroom):
                 yield m
         
-    def get_count(talkday=None, person=None, chatroom=None):
+    def get_count(self, talkday=None, person=None, chatroom=None):
         '''
         You can bring Word usage count using 'get_count' mothod.
         It returns word count according to named parameter person or talkday.
@@ -102,6 +102,8 @@ class Words:
                     lower_bound = mid + 1
                 elif self[mid] > word:
                     upper_bound = mid
+                else:
+                    break
 
             # Duplication
             if mid < len(self) and self[mid] == word:
@@ -144,3 +146,18 @@ class Words:
                 return word
             else:
                 return False
+    
+    def words_count(self, talkday=None, person=None, chatroom=None, sort_by_f=False):
+        '''
+        Return {word:count} dictionary of lists of (word:count) when sort_by_f=true
+        You can bring counts according to talkday, person, chatroom.
+        '''
+        ret = {}
+        for word in self._words:
+            cnt = word.get_count(talkday, person, chatroom)
+            if cnt:
+                ret[word.name] = cnt
+        if sort_by_f:
+            ret = sorted(list(ret.items()), key=lambda x:x[1])
+            ret.reverse()
+        return ret

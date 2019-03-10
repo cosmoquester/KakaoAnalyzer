@@ -45,10 +45,10 @@ class People:
         return self._people[idx]
 
     def __str__(self):
-        ret = "["
+        ret = ""
         for person in self._people:
             ret += str(person) + ", "
-        ret = ret[:-2] + ']'
+        ret = ret[:-2]
 
         return ret
     

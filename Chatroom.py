@@ -39,6 +39,13 @@ class Chatroom:
             ret[word.name] = cnt
         return ret
 
+    def tot_person_rate(self):
+        ''' Return tot_person rate '''
+        ret = {k:cnt/self.tot_msg for k,cnt in self.tot_person.items()}
+        ret = sorted(list(ret.items()), key = lambda x:x[1])
+        ret.reverse()
+        return ret
+
     def append(self, datetime, person_name, content):
 
         # Add new person
@@ -67,11 +74,12 @@ class Chatroom:
         line_words = self.line_analyze(content)
         for word in line_words:
 
-            # Add word to chatroom
+            # Add word to chatroom and people
             cur_word = self.words.find(word, create=True)
+            cur_person.words.add(cur_word)        
 
             # Add word history
-            cur_word.append(cur_talkday, cur_person, self, cur_msg)          
+            cur_word.append(cur_talkday, cur_person, self, cur_msg)  
         
     def line_analyze(self, line):
         ret = {}
