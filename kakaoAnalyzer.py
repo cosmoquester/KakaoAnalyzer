@@ -137,7 +137,7 @@ if __name__ == '__main__':
             words_cnts = person.words.words_count(person=person, chatroom=chatroom, sort_by_f=True)
 
             sel = int(input("How much numbers you want to print: "))
-            for i in range(sel):
+            for i in range(min(sel, words_cnts)):
                 print("{}. {} : {} Times".format(i+1, words_cnts[i][0], words_cnts[i][1]))
         elif sel == '7':
             exit()
