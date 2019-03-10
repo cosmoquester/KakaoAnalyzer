@@ -23,8 +23,8 @@ class Msgs:
         self.talkday = talkday
         self._msgs = []
 
-    def append(self, Message):
-        self._msgs.append(Message)
+    def append(self, message):
+        self._msgs.append(message)
     
     def __len__(self):
         return len(self._msgs)
