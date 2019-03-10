@@ -10,6 +10,9 @@ class Message:
         self.datetime = datetime
         self.content = content
 
+    def __str__(self):
+        return ' '.join((self.datetime.strftime("%Y-%m-%d %H:%M"), self.person.name, self.content))
+
 '''
 A Msgs is a collection of Messages by specific chatroom and talkday.
 '''

@@ -87,7 +87,7 @@ def Analize(data_in):
 
 
 if __name__ == '__main__':
-    f_name = input("Please input conversation file name without extension(ex conv)\n: ")
-    f = open(f_name, 'r', encoding='utf8')
+    f_name = input("Please input conversation file name without extension(ex conv)\n:")
+    f = open(f_name+'.txt' if f_name[:-4] != 'txt' else f_name, 'r')
 
     chatroom = Analize(f)
