@@ -1,18 +1,45 @@
-'''
-A Word instance is a word like "apple".
-It has information about who, when, how much use this.
-'''
 class Word:
+    '''
+    A Word instance is a word like "apple".
+    It has information about who, when, how much use this.
+    '''
     def __init__(self, name):
         self.name = name
         self._history = []
 
-    def append(talkday, person, chatroom, message):
+    def append(self, talkday, person, chatroom, message):
         self._history.append((talkday, person, chatroom, message))
+
+    def __str__(self):
+        return self.name
 
     def __getitem__(self, idx):
         return self._history[idx]
 
+    def __eq__(self, other):
+        if type(other)==Word: other = other.name
+        return self.name == other
+
+    def __ne__(self, other):
+        if type(other)==Word: other = other.name
+        return self.name != other
+
+    def __lt__(self, other):
+        if type(other)==Word: other = other.name
+        return self.name < other
+    
+    def __le__(self, other):
+        if type(other)==Word: other = other.name
+        return self.name <= other
+
+    def __gt__(self, other):
+        if type(other)==Word: other = other.name
+        return self.name > other
+    
+    def __ge__(self, other):
+        if type(other)==Word: other = other.name
+        return self.name >= other
+    
     def get(talkday=None, person=None, chatroom=None):
         '''
         You can bring Word history using 'get' mothod.
@@ -37,3 +64,83 @@ class Word:
                 (not chatroom or c is chatroom):
                 ret += 1
         return ret
+
+class Words:
+    '''
+    This is like sorted Lists.
+    Maintain sorted for speed.
+    '''
+    def __init__(self):
+        self._words = []
+
+    def __len__(self):
+        return len(self._words)
+
+    def __getitem__(self, idx):
+        return self._words[idx]
+
+    def names(self):
+        for w in self._words:
+            yield w
+    
+    def add(self, word:Word, idx=None):
+        '''
+        Add word instance to this. 
+        '''
+        if idx:
+            self._words.insert(idx, word)
+            return True
+        else:
+            lower_bound=0
+            upper_bound=len(self)
+            mid = (lower_bound + upper_bound) // 2
+            
+            # Binary search
+            while lower_bound < upper_bound:
+                mid = (lower_bound + upper_bound) // 2
+                if self[mid] < word:
+                    lower_bound = mid + 1
+                elif self[mid] > word:
+                    upper_bound = mid
+
+            # Duplication
+            if mid < len(self) and self[mid] == word:
+                return False
+            
+            else:
+                self._words.insert(mid, word)
+
+    def find(self, word, create=False):
+        '''
+        find and return Word instance if exist.
+        When create is True, return new Word instance despite absence.
+        word parameter can be string or Word type.
+        '''
+        lower_bound=0
+        upper_bound=len(self)
+        mid = (lower_bound + upper_bound) // 2
+        
+        # Binary search
+        while lower_bound < upper_bound:
+            mid = (lower_bound + upper_bound) // 2
+            if self[mid] < word:
+                lower_bound = mid + 1
+            elif self[mid] > word:
+                upper_bound = mid
+            else:
+                break
+
+        # Success and return
+        if mid < len(self) and self[mid] == word:
+            return self[mid]
+
+        # Find fail so create
+        else:
+            if create:
+                if type(word) != Word:
+                    new_word = Word(word)
+                    self.add(new_word, idx=mid)
+                    word = new_word
+                return word
+            else:
+                return False

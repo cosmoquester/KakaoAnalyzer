@@ -2,7 +2,7 @@ from re import search, compile
 from Chatroom import Chatroom
 from datetime import datetime
 
-def Analize(data_in):
+def Analize(data_in, line_num=None):
     '''
     Analize kakaoTalk text. input parameter is file io or string.
     It returns Chatroom instance.
@@ -13,6 +13,7 @@ def Analize(data_in):
     message_exp = compile('\[(?P<name>.+?)\] \[(?P<afm>..) (?P<hour>\d{1,2}):(?P<min>\d{2})\] (?P<con>.+)')
 
     # Variables, queue is for multiline message.
+    loop = 0
     date = None
     chatname = None
     line = True
@@ -68,6 +69,10 @@ def Analize(data_in):
         # The case this line is addition string of last message.
         elif len(queue):
             queue[-1][2] += '\n' + line
+
+        if line_num:
+            loop += 1
+            print(loop, '/', line_num)
     
     # Last Dequeuing
     if len(queue):
@@ -76,18 +81,24 @@ def Analize(data_in):
     data_in.close()
     return chatroom
 
-
-
-
-
-
-
-
-
-
-
 if __name__ == '__main__':
+    linenum = 0
     f_name = input("Please input conversation file name without extension(ex conv)\n:")
-    f = open(f_name+'.txt' if f_name[:-4] != 'txt' else f_name, 'r')
+    
+    if len(f_name) > 4 and f_name[-4:] != '.txt' or len(f_name) <= 4:
+        f_name += '.txt'
+    
+    try:
+        f = open(f_name, 'r', encoding='utf8')
+        while f.readline(): linenum+=1
+        f.close()
+        f = open(f_name, 'r', encoding='utf8')
 
-    chatroom = Analize(f)
+    except:
+        f = open(f_name, 'r')
+        while f.readline(): linenum+=1
+        f.close()
+        f = open(f_name, 'r')
+
+    chatroom = Analize(f, linenum)
+

@@ -1,16 +1,18 @@
 from Person import Person, People
 from Message import Message, Msgs
 from TalkDay import TalkDay
+from Word import Word, Words
 
-'''
-Chatroom is a class having information about Msgs and People in a chatroom.
-'''
+
 class Chatroom:
+    '''
+    Chatroom is a class having information about Msgs and People in a chatroom.
+    '''
     def __init__(self, name):
         self.name = name
         self.talkdays = []
         self.people = People()
-        self.words = []
+        self.words = Words()
         self.tot_msg = 0
         self.tot_person = {}
 
@@ -56,22 +58,26 @@ class Chatroom:
             cur_talkday = self.talkdays[self.talkdays.index(datetime.date())]
 
         # Add new Message
-        new_msg = Message(self, cur_talkday, cur_person, datetime, content)
+        cur_msg = Message(self, cur_talkday, cur_person, datetime, content)
         self.tot_msg += 1
         self.tot_person[person_name] = self.tot_person.get(person_name, 0) + 1
-        cur_talkday.append(self, new_msg)
+        cur_talkday.append(self, cur_msg)
         
         # Sentence Analize
+        line_words = self.line_analyze(content)
+        for word in line_words:
 
-        # 
+            # Add word to chatroom
+            cur_word = self.words.find(word, create=True)
 
-
-        # test code 
-        # try:
-        #     print(datetime.strftime('%y/%m/%d %H:%M:%S'), person_name, content)
-        # except UnicodeEncodeError as e:
-        #     print(e)
-
+            # Add word history
+            cur_word.append(cur_talkday, cur_person, self, cur_msg)          
+        
+    def line_analyze(self, line):
+        ret = {}
+        for word in line.split():
+            ret[word] = ret.get(word, 0) + 1
+        return ret
 
 
     def construct(self):

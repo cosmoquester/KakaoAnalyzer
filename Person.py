@@ -1,7 +1,14 @@
+from Word import Words
+
 class Person:
+    '''
+    It is about a person. It is distinguished by name.
+    It has Words having the words this person used.
+    chatrooms contains the chatrooms that this person talked
+    '''
     def __init__(self, name):
         self.name = name
-        self.words = []
+        self.words = Words()
         self.curses = []
         self.chatrooms = []
 
@@ -27,6 +34,7 @@ class Person:
         return ret
 
 class People:
+    ''' People is a collection of person. '''
     def __init__(self):
         self._people = []
 
@@ -48,10 +56,12 @@ class People:
         return self._people.append(person)
 
     def names(self):
+        ''' It returns all people names iterator '''
         for p in self._people:
             yield p.name
         
     def find(self, name):
+        ''' find name. if it were, return Person instance else None. '''
         names = list(self.names())
         if name in names:
             return self._people[names.index(name)]

@@ -1,8 +1,8 @@
-'''
-Message is one message someone talked.
-talkday is a class having Messages in some day and datetime is just datetime.
-'''
 class Message:
+    '''
+    Message is one message someone talked.
+    talkday is a class having Messages in some day and datetime is just datetime.
+    '''
     def __init__(self, chatroom, talkday, person, datetime, content):
         self.chatroom = chatroom
         self.talkday = talkday
@@ -13,10 +13,11 @@ class Message:
     def __str__(self):
         return ' '.join((self.datetime.strftime("%Y-%m-%d %H:%M"), self.person.name, self.content))
 
-'''
-A Msgs is a collection of Messages by specific chatroom and talkday.
-'''
+
 class Msgs:
+    '''
+    A Msgs is a collection of Messages by specific chatroom and talkday.
+    '''
     def __init__(self, chatroom, talkday):
         self.chatroom = chatroom
         self.talkday = talkday
