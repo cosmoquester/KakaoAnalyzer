@@ -8,15 +8,12 @@ def Analize(data_in, line_num=None):
     It returns Chatroom instance.
     '''
 
-    # Regular Expressions
-    datetime_exp = compile('-+ (?P<year>\d{4})년 (?P<month>\d{1,2})월 (?P<day>\d{1,2})일 .요일 -+\r?\n?')
-    message_exp = compile('\[(?P<name>.+?)\] \[(?P<afm>..) (?P<hour>\d{1,2}):(?P<min>\d{2})\] (?P<con>.+)')
-
     # Variables, queue is for multiline message.
     loop = 0
     date = None
     chatname = None
     line = True
+    mobile = False
     queue = []
 
     if type(data_in) == str:
@@ -26,8 +23,20 @@ def Analize(data_in, line_num=None):
     # Find Chatroom Name
     while line and not chatname:
         line = data_in.readline()
-        chatname = search('(.*?) 님과 카카오톡 대화', line).group(1)
-        chatroom = Chatroom(chatname)
+        chatname = search('(.+?) 님과 카카오톡 대화|(.+?) \d+ 카카오톡 대화', line).group(1,2)
+        if chatname[0] == None:
+            chatname = chatname[1]
+            if chatname:
+                mobile = True
+    chatroom = Chatroom(chatname)
+    print(mobile)
+    # Regular Expressions
+    if mobile:
+        datetime_exp = compile('(?P<year>\d{4})년 (?P<month>\d{1,2})월 (?P<day>\d{1,2})일 .. \d{1,2}:\d{2}\r?\n?$')
+        message_exp = compile('\d{4}년 \d{1,2}월 \d{1,2}일 (?P<afm>..) (?P<hour>\d{1,2}):(?P<min>\d{2}), (?P<name>.+?) : (?P<con>.+)')
+    else:
+        datetime_exp = compile('-+ (?P<year>\d{4})년 (?P<month>\d{1,2})월 (?P<day>\d{1,2})일 .요일 -+\r?\n?')
+        message_exp = compile('\[(?P<name>.+?)\] \[(?P<afm>..) (?P<hour>\d{1,2}):(?P<min>\d{2})\] (?P<con>.+)')
 
     # Check Text lines
     while line:
