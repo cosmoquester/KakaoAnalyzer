@@ -5,9 +5,7 @@ from Word import Word, Words
 
 
 class Chatroom:
-    '''
-    Chatroom is a class having information about Msgs and People in a chatroom.
-    '''
+    ''' Chatroom is a class having information about Msgs and People in a chatroom. '''
     def __init__(self, name):
         self.name = name
         self.talkdays = []
@@ -28,7 +26,7 @@ class Chatroom:
     def get_words(self):
         ''' Return dictionary word:count used in this chatroom. '''
         ret = {}
-        for word in words:
+        for word in self.words:
             cnt = word.get_count(chatroom=self)
             ret[word.name] = cnt
         return ret
@@ -79,16 +77,4 @@ class Chatroom:
         ret = {}
         for word in line.split():
             ret[word] = ret.get(word, 0) + 1
-        return ret
-
-
-    def construct(self):
-        ''' Reconstruct messages into formatted text '''
-
-        ret = ''
-        for msgs in self._Msgs:
-            ret += 'Date Time'
-            for msg in msgs:
-                ret += 'Message'
-
         return ret
