@@ -40,6 +40,9 @@ class Chatroom:
         ret.reverse()
         return ret
 
+    def find_word(self, word, create=False):
+        return self._words.find(word, create=create)
+
     def append(self, datetime, person_name, content):
 
         # Add new person
@@ -69,7 +72,7 @@ class Chatroom:
         for word in line_words:
 
             # Add word to chatroom and people
-            cur_word = self._words.find(word, create=True)
+            cur_word = self.find_word(word, create=True)
             cur_person.add_word(cur_word)        
 
             # Add word history
