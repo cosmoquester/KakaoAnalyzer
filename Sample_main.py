@@ -1,4 +1,4 @@
-from kakaoAnalyzer import Analize
+from kakaoAnalyzer import Analyze
 
 linenum = 0
 f_name = input("Please input conversation file name without extension(ex conv)\n:")
@@ -18,7 +18,7 @@ except:
     f.close()
     f = open(f_name, 'r')
 
-chatroom = Analize(f, linenum)
+chatroom = Analyze(f, linenum)
 
 while True:
     sel = input('1. Chatroom name\n'+

@@ -2,9 +2,9 @@ from re import search, compile
 from Chatroom import Chatroom
 from datetime import datetime
 
-def Analize(data_in, line_num=None):
+def Analyze(data_in, line_num=None):
     '''
-    Analize kakaoTalk text. input parameter is file io or string.
+    Analyze kakaoTalk text. input parameter is file io or string.
     It returns Chatroom instance.
     '''
 
