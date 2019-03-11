@@ -28,6 +28,8 @@ def Analize(data_in, line_num=None):
             chatname = chatname[1]
             if chatname:
                 mobile = True
+        else:
+            chatname = chatname[0]
     chatroom = Chatroom(chatname)
 
     # Regular Expressions
