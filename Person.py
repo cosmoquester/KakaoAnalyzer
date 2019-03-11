@@ -8,17 +8,23 @@ class Person:
     '''
     def __init__(self, name):
         self.name = name
-        self.words = Words()
+        self._words = Words()
         self.curses = []
         self.chatrooms = []
 
     def __str__(self):
         return self.name
 
+    def add_word(self, word, idx=None):
+        self._words.add(word, idx)
+
+    def count_words(self, talkday=None, chatroom=None, sort_by_f=False):
+        return self._words.words_count(talkday, self, chatroom, sort_by_f)
+
     def get_words(self, talkday=None):
         ''' It returns dictionary the words and the number person used. '''
         ret = {}
-        for word in self.words:
+        for word in self._words:
             cnt = word.get_count(talkday=talkday, person=self)
             if cnt:
                 ret[word.name] = cnt

@@ -57,7 +57,7 @@ while True:
             print("{}: {}".format(i,d))
         sel = int(input("select the person: "))
         person = chatroom.people[sel]
-        words_cnts = person.words.words_count(person=person, chatroom=chatroom, sort_by_f=True)
+        words_cnts = person.count_words(chatroom=chatroom, sort_by_f=True)
 
         sel = int(input("How much numbers you want to print: "))
         for i in range(min(sel, len(words_cnts))):

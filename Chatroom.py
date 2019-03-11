@@ -10,7 +10,7 @@ class Chatroom:
         self.name = name
         self.talkdays = []
         self.people = People()
-        self.words = Words()
+        self._words = Words()
         self.tot_msg = 0
         self.tot_person = {}
         if not line_analyze:
@@ -28,7 +28,7 @@ class Chatroom:
     def get_words(self):
         ''' Return dictionary word:count used in this chatroom. '''
         ret = {}
-        for word in self.words:
+        for word in self._words:
             cnt = word.get_count(chatroom=self)
             ret[word.name] = cnt
         return ret
@@ -69,8 +69,8 @@ class Chatroom:
         for word in line_words:
 
             # Add word to chatroom and people
-            cur_word = self.words.find(word, create=True)
-            cur_person.words.add(cur_word)        
+            cur_word = self._words.find(word, create=True)
+            cur_person.add_word(cur_word)        
 
             # Add word history
             cur_word.append(cur_talkday, cur_person, self, cur_msg)  

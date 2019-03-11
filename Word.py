@@ -84,9 +84,7 @@ class Words:
             yield w
     
     def add(self, word:Word, idx=None):
-        '''
-        Add word instance to this. 
-        '''
+        ''' Add word instance to this.  '''
         if idx:
             self._words.insert(idx, word)
             return True
