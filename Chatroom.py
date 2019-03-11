@@ -6,14 +6,15 @@ from Word import Word, Words
 
 class Chatroom:
     ''' Chatroom is a class having information about Msgs and People in a chatroom. '''
-    def __init__(self, name, line_analyze=self.line_spliter):
+    def __init__(self, name, line_analyze=None):
         self.name = name
         self.talkdays = []
         self.people = People()
         self.words = Words()
         self.tot_msg = 0
         self.tot_person = {}
-        self.line_analyze = line_analyze
+        if not line_analyze:
+            self.line_analyze = self.line_spliter
 
     def __len__(self):
         return len(self.talkdays)
