@@ -25,12 +25,6 @@ class Chatroom:
     def __str__(self):
         return repr(self) + ' Name:' + self.name
 
-    def getiter(self):
-        ''' Return iterator having whole messages in this chatroom. '''
-        for msgs in self.talkdays:
-            for msg in msgs:
-                yield msg
-
     def get_words(self):
         ''' Return dictionary word:count used in this chatroom. '''
         ret = {}
