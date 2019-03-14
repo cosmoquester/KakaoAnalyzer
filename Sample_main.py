@@ -26,7 +26,7 @@ while True:
             '3. Message Count\n'+
             '4. Message Rate\n'+
             '5. View a day conversation\n'+
-            '6. View a person words by frequency\n'
+            '6. View a person words by frequency\n'+
             '7. Exit\n:')
     
     if sel == '1':
