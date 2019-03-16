@@ -92,17 +92,27 @@ class Chatroom:
     def line_spliter(self, line):
         ''' Just split a line into several parts '''
         ret = {}
+
+        for i in [',', '.', ':', ';', '~', '/', '(', ')', '^', '<', '>']:
+                line.replace(i, ' ')
         for word in line.split():
+            if len(word)>1 and word[-2:] in ['에게', '이다', '에서', '처럼', '라고', '이가']:
+                word=word[:-2]
+            elif word[-1] in ['은', '는', '이', '가', '을', '를', '께', '의', '고']:
+                word=word[:-1]
             ret[word] = ret.get(word, 0) + 1
         return ret
 
     def kkma_analyzer(self, line):
         ''' Analyze line using Kkma Analzyer '''
         ret = {}
-        pos = self.kkma.pos(line)
+        try:
+            pos = self.kkma.pos(line)
+        except:
+            pos = []
 
         for w, p in pos:
-            if p[0] in 'NVM' or p in ['XR', 'SF', 'SL', 'EMO']:
+            if p[0] in 'NVM' or p in ['XR', 'SL', 'EMO']:
                 if p[0] == 'V':
                     w += '다'
                 ret[w] = ret.get(w, 0) + 1
