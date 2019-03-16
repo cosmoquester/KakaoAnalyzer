@@ -3,7 +3,7 @@ from re import search, compile
 from datetime import datetime
 
 
-def Analyze(data_in, line_num=None):
+def Analyze(data_in, line_num=None, line_analyze=None):
     '''
     Analyze kakaoTalk text. input parameter is file io or string.
     It returns Chatroom instance.
@@ -31,7 +31,7 @@ def Analyze(data_in, line_num=None):
                 mobile = True
         else:
             chatname = chatname[0]
-    chatroom = Chatroom(chatname)
+    chatroom = Chatroom(chatname, line_analyze)
 
     # Regular Expressions
     if mobile:

@@ -13,6 +13,17 @@ class Chatroom:
         self._words = Words()
         self.tot_msg = 0
         self.tot_person = {}
+        self.line_analyze = None
+
+        if line_analyze == 'Kkma':
+            try:
+                from konlpy.tag import Kkma
+                self.kkma = Kkma()
+                self.line_analyze = self.kkma_analyzer
+            except:
+                print("Please install konlpy packge.")
+                line_analyze = None
+
         if not line_analyze:
             self.line_analyze = self.line_spliter
 
@@ -79,7 +90,20 @@ class Chatroom:
             cur_word.append(cur_talkday, cur_person, self, cur_msg)  
         
     def line_spliter(self, line):
+        ''' Just split a line into several parts '''
         ret = {}
         for word in line.split():
             ret[word] = ret.get(word, 0) + 1
+        return ret
+
+    def kkma_analyzer(self, line):
+        ''' Analyze line using Kkma Analzyer '''
+        ret = {}
+        pos = self.kkma.pos(line)
+
+        for w, p in pos:
+            if p[0] in 'NVM' or p in ['XR', 'SF', 'SL', 'EMO']:
+                if p[0] == 'V':
+                    w += '다'
+                ret[w] = ret.get(w, 0) + 1
         return ret
