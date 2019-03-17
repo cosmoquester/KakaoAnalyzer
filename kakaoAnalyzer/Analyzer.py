@@ -1,4 +1,3 @@
-from .msgstruct.Chatroom import *
 from re import search, compile
 from datetime import datetime
 
