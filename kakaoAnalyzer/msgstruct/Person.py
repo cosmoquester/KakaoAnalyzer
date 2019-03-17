@@ -9,30 +9,30 @@ class Person:
     def __init__(self, name):
         self.name = name
         self._words = Words()
+        self._curses = Words()
         self.chatrooms = []
+        self.curse_cnt = 0
 
     def __str__(self):
         return self.name
 
-    def add_word(self, word, idx=None):
-        self._words.add(word, idx)
+    def add_word(self, word, idx=None, curse=False):
+        if curse:
+            self._curses.add(word, idx)
+            self.curse_cnt += 1
+        else:
+            self._words.add(word, idx)
 
-    def count_words(self, talkday=None, chatroom=None, sort_by_f=False):
-        return self._words.words_count(talkday, self, chatroom, sort_by_f)
+    def count_words(self, talkday=None, chatroom=None, sort_by_f=False, curse=False):
+        if curse:
+            return self._curses.words_count(talkday, self, chatroom, sort_by_f)
+        else:
+            return self._words.words_count(talkday, self, chatroom, sort_by_f)
 
-    def get_words(self, talkday=None):
+    def get_words(self, talkday=None, curse=False):
         ''' It returns dictionary the words and the number person used. '''
         ret = {}
-        for word in self._words:
-            cnt = word.get_count(talkday=talkday, person=self)
-            if cnt:
-                ret[word.name] = cnt
-        return ret
-
-    def get_curses(self, talkday=None):
-        ''' It returns dictionary the curses and the number person used. '''
-        ret = {}
-        for word in self.curses:
+        for word in self._words if not curse else self._curses:
             cnt = word.get_count(talkday=talkday, person=self)
             if cnt:
                 ret[word.name] = cnt
