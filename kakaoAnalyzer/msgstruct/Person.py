@@ -29,15 +29,6 @@ class Person:
                 ret[word.name] = cnt
         return ret
 
-    def get_curses(self, talkday=None):
-        ''' It returns dictionary the curses and the number person used. '''
-        ret = {}
-        for word in self.curses:
-            cnt = word.get_count(talkday=talkday, person=self)
-            if cnt:
-                ret[word.name] = cnt
-        return ret
-
 class People:
     ''' People is a collection of person. '''
     def __init__(self):
