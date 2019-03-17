@@ -1,5 +1,6 @@
 from re import search, compile
 from datetime import datetime
+from .msgstruct import *
 
 
 def Analyze(data_in, line_num=None, line_analyze=None):
