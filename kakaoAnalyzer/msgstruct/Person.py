@@ -32,6 +32,10 @@ class Person:
     def get_words(self, talkday=None, curse=False):
         ''' It returns dictionary the words and the number person used. '''
         ret = {}
+<<<<<<< HEAD
+=======
+
+>>>>>>> 912dde648d4895a14e041f1c21e54664e9c40b63
         for word in self._words if not curse else self._curses:
             cnt = word.get_count(talkday=talkday, person=self)
             if cnt:

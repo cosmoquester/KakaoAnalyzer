@@ -138,9 +138,8 @@ class Words:
         else:
             if create:
                 if type(word) != Word:
-                    new_word = Word(word)
-                    self.add(new_word, idx=mid)
-                    word = new_word
+                    word = Word(word)
+                self.add(word, idx=mid)
                 return word
             else:
                 return False

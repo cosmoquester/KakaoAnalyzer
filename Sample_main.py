@@ -1,7 +1,7 @@
 from kakaoAnalyzer import Analyze
 
 linenum = 0
-f_name = input("Please input conversation file name without extension(ex conv)\n:")
+f_name = input("Please input conversation file name without extension(ex KakaoTalk_Sample)\n:")
 
 if len(f_name) > 4 and f_name[-4:] != '.txt' or len(f_name) <= 4:
     f_name += '.txt'
