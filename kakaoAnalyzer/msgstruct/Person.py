@@ -9,7 +9,6 @@ class Person:
     def __init__(self, name):
         self.name = name
         self._words = Words()
-        self.curses = []
         self.chatrooms = []
 
     def __str__(self):
