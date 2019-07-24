@@ -14,7 +14,6 @@ def Analyze(data_in, line_num=None, line_analyze=None):
     date = None
     chatname = None
     line = True
-    mobile = False
     queue = []
 
     if type(data_in) == str:
