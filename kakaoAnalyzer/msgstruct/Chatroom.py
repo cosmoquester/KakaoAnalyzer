@@ -36,6 +36,15 @@ class Chatroom:
     def __str__(self):
         return repr(self) + ' Name:' + self.name
 
+    def get_total_msgs(self):
+        ''' Return Total messages '''
+        ret = []
+        for talkday in self.talkdays:
+            for msg in talkday.get_Msg(self):
+                ret.append(msg)
+
+        return ret
+
     def get_words(self):
         ''' Return dictionary word:count used in this chatroom. '''
         ret = {}
