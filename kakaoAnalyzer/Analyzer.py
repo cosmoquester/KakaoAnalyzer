@@ -22,24 +22,28 @@ def Analyze(data_in, line_num=None, line_analyze=None):
         data_in = StringIO(data_in)
 
     # Find Chatroom Name
-    while line and not chatname:
-        line = data_in.readline()
-        chatname = search('(.+?) 님과 카카오톡 대화|(.+?) \d+ 카카오톡 대화', line).group(1,2)
+    line = data_in.readline()
+    chatname = search('(.+?) 님과 카카오톡 대화|(.+?) \d+ 카카오톡 대화', line)
+
+    # Android or PC
+    if chatname:
+        chatname = chatname.group(1,2)
+        # Android
         if chatname[0] == None:
             chatname = chatname[1]
-            if chatname:
-                mobile = True
+            datetime_exp = compile('(?P<year>\d{4})년 (?P<month>\d{1,2})월 (?P<day>\d{1,2})일 .. \d{1,2}:\d{2}\r?\n?$')
+            message_exp = compile('\d{4}년 \d{1,2}월 \d{1,2}일 (?P<afm>..) (?P<hour>\d{1,2}):(?P<min>\d{2}), (?P<name>.+?) : (?P<con>.+)')
+        # PC
         else:
             chatname = chatname[0]
-    chatroom = Chatroom(chatname, line_analyze)
-
-    # Regular Expressions
-    if mobile:
-        datetime_exp = compile('(?P<year>\d{4})년 (?P<month>\d{1,2})월 (?P<day>\d{1,2})일 .. \d{1,2}:\d{2}\r?\n?$')
-        message_exp = compile('\d{4}년 \d{1,2}월 \d{1,2}일 (?P<afm>..) (?P<hour>\d{1,2}):(?P<min>\d{2}), (?P<name>.+?) : (?P<con>.+)')
+            datetime_exp = compile('-+ (?P<year>\d{4})년 (?P<month>\d{1,2})월 (?P<day>\d{1,2})일 .요일 -+\r?\n?')
+            message_exp = compile('\[(?P<name>.+?)\] \[(?P<afm>..) (?P<hour>\d{1,2}):(?P<min>\d{2})\] (?P<con>.+)')
+    # ipad
     else:
-        datetime_exp = compile('-+ (?P<year>\d{4})년 (?P<month>\d{1,2})월 (?P<day>\d{1,2})일 .요일 -+\r?\n?')
-        message_exp = compile('\[(?P<name>.+?)\] \[(?P<afm>..) (?P<hour>\d{1,2}):(?P<min>\d{2})\] (?P<con>.+)')
+        chatname = line
+        datetime_exp = compile('(?P<year>\d{4})년 (?P<month>\d{1,2})월 (?P<day>\d{1,2})일 .요일\r?\n?')
+        message_exp = compile('(?P<year>\d{4}). (?P<month>\d{1,2}). (?P<day>\d{1,2}). (?P<afm>..) (?P<hour>\d{1,2}):(?P<min>\d{1,2}), (?P<name>.+?) : (?P<con>.+?)\r?\n?$')
+    chatroom = Chatroom(chatname, line_analyze)
 
     # Check Text lines
     while line:
