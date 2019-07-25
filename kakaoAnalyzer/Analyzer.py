@@ -22,11 +22,11 @@ def Analyze(data_in, line_num=None, line_analyze=None, mode=None):
 
     # Select Mode
     if mode:
-        if mode in ('android', 1):
+        if mode in ('android', , '1', 1):
             mode = 1 # 1 is Android
-        elif mode in ('winpc', 'win', 2):
+        elif mode in ('winpc', 'win', , '2', 2):
             mode = 2 # 2 is Windows PC
-        elif mode in ('ios', 'ipad', 3):
+        elif mode in ('ios', 'ipad', '3', 3):
             mode = 3 # 3 is iOS
         else:
             mode = None
