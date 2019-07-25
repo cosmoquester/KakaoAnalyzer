@@ -1,5 +1,6 @@
 from re import search, compile
 from datetime import datetime
+from tqdm import tqdm
 from .msgstruct import *
 
 
@@ -65,6 +66,8 @@ def Analyze(data_in, line_num=None, line_analyze=None, mode=None):
     chatroom = Chatroom(chatname, line_analyze)
 
     # Check Text lines
+    pbar = tqdm(total=line_num)
+
     while line:
         line = data_in.readline()
 
@@ -105,9 +108,9 @@ def Analyze(data_in, line_num=None, line_analyze=None, mode=None):
         elif len(queue) and not etc_exp.match(line):
             queue[-1][2] += '\n' + line
 
-        if line_num:
-            loop += 1
-            print(loop, '/', line_num)
+        pbar.update(1)
+    
+    pbar.close()
     
     # Last Dequeuing
     if len(queue):
