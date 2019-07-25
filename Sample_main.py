@@ -18,7 +18,7 @@ except:
     f.close()
     f = open(f_name, 'r')
 
-chatroom = Analyze(f, linenum)
+chatroom = Analyze(f, linenum, mode='win')
 
 while True:
     sel = input('1. Chatroom name\n'+
