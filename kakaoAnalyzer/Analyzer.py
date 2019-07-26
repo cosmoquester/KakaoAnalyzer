@@ -35,7 +35,7 @@ def open_file(f_name, encoding=None):
 
     return f, linenum
 
-def select_mode(f_name, mode, encoding):
+def select_mode(f_name, encoding):
     fd, _ = open_file(f_name, encoding)
     lines = fd.read(4096)
     fd.close()
@@ -45,29 +45,20 @@ def select_mode(f_name, mode, encoding):
     ios_exp = '(?P<year>\d{4}). (?P<month>\d{1,2}). (?P<day>\d{1,2}). (?P<afm>..) (?P<hour>\d{1,2}):(?P<min>\d{1,2}), (?P<name>.+?) : (?P<con>.+?)\r?\n?$'
     exps = (None, android_exp, windows_exp, ios_exp)
 
-    # Select Mode
-    if mode:
-        if mode in ('android', '1', 1):
-            mode = 1 # 1 is Android
-        elif mode in ('winpc', 'win', '2', 2):
-            mode = 2 # 2 is Windows PC
-        elif mode in ('ios', 'ipad', '3', 3):
-            mode = 3 # 3 is iOS
-        else:
-            mode = None
-    
-    if mode and search(exps[mode], lines):
-        return mode
-
-    for i in range(1,4):
-        if search(exps[i], lines):
-            return i
+    for mode in range(1,4):
+        if search(exps[mode], lines):
+            return mode
 
     raise Exception('Cannot find file mode!')
 
-def Analyze(f_name, line_analyze=None, mode=None, encoding=None):
+def Analyze(f_name, line_analyze=None, encoding=None, preprocessor=None):
     '''
-    Analyze kakaoTalk text. input parameter is file io or string.
+    Analyze kakaoTalk text. input parameter is file path.
+    'line_analyze' parameter is for spliting words. basic is space spliter.
+    you can use kkma analzyer, 'kkma' parameter or you can use your own function.
+    encoding is file open encoding option.
+    If you want to preprocess message content, you can use preprocessor which should be your own function.
+
     It returns Chatroom instance.
     '''
 
@@ -79,7 +70,7 @@ def Analyze(f_name, line_analyze=None, mode=None, encoding=None):
     queue = []
 
     # Select Mode
-    mode = select_mode(f_name, mode, encoding)
+    mode = select_mode(f_name, encoding)
 
     # File Open
     data_in, line_num = open_file(f_name, encoding)
@@ -138,6 +129,8 @@ def Analyze(f_name, line_analyze=None, mode=None, encoding=None):
         elif m_message:
             # Excute
             if len(queue):
+                if preprocessor:
+                    queue[0][2] = preprocessor(queue[0][2])
                 chatroom.append(*queue[0])
                 del queue[0]
 

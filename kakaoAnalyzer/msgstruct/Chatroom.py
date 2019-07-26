@@ -13,7 +13,7 @@ class Chatroom:
         self._words = Words()
         self.tot_msg = 0
         self.tot_person = {}
-        self.line_analyze = None
+        self.line_analyze = line_analyze
 
         if line_analyze == 'Kkma':
             try:
