@@ -6,7 +6,7 @@ f_name = input("Please input conversation file name without extension(ex KakaoTa
 if len(f_name) > 4 and f_name[-4:] != '.txt' or len(f_name) <= 4:
     f_name += '.txt'
 
-chatroom = Analyze(f_name, mode=input('Please Input Mode(android, win, ios): '))
+chatroom = Analyze(f_name)
 
 while True:
     sel = input('1. Chatroom name\n'+
