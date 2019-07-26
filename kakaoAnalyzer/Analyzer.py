@@ -63,7 +63,7 @@ def Analyze(f_name, line_analyze=None, mode=None, encoding=None):
             mode = None
 
     # Find Chatroom Name
-    line = data_in.readline()
+    line = data_in.readline().replace('\ufeff', '')
     chatname = search('(.+?) 님과 카카오톡 대화|(.+?) \d+ 카카오톡 대화', line)
 
     # Set Chatname
@@ -75,14 +75,12 @@ def Analyze(f_name, line_analyze=None, mode=None, encoding=None):
 
     # Android
     if mode == 1:
-        chatname = chatname[1]
         datetime_exp = compile('(?P<year>\d{4})년 (?P<month>\d{1,2})월 (?P<day>\d{1,2})일 .. \d{1,2}:\d{2}\r?\n?$')
         message_exp = compile('\d{4}년 \d{1,2}월 \d{1,2}일 (?P<afm>..) (?P<hour>\d{1,2}):(?P<min>\d{2}), (?P<name>.+?) : (?P<con>.+)')
         etc_exp = compile('\d{4}년 \d{1,2}월 \d{1,2}일 .. \d{1,2}:\d{1,2}, .+')
 
     # Windows PC
     elif mode == 2:
-        chatname = chatname[0]
         datetime_exp = compile('-+ (?P<year>\d{4})년 (?P<month>\d{1,2})월 (?P<day>\d{1,2})일 .요일 -+\r?\n?')
         message_exp = compile('\[(?P<name>.+?)\] \[(?P<afm>..) (?P<hour>\d{1,2}):(?P<min>\d{2})\] (?P<con>.+)')
         etc_exp = compile('.+님이 나갔습니다.\r?\n?|.+님이 .+님을 초대하였습니다.\r?\n?|.+님이 들어왔습니다.\r?\n?')
