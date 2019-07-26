@@ -3,8 +3,39 @@ from datetime import datetime
 from tqdm import tqdm
 from .msgstruct import *
 
+def open_file(f_name, encoding=None):
+    ''' 
+    Open KakaoTalk File. 
+    'f_name' is file path to open. encoding is encoding type to open.
+    It will return file descriptor and the number of lines.
+    '''
+    linenum = 0
 
-def Analyze(data_in, line_num=None, line_analyze=None, mode=None):
+    if not encoding:
+        try:
+            f = open(f_name, 'r', encoding='utf8')
+            while f.readline(): linenum+=1
+            f.close()
+            f = open(f_name, 'r', encoding='utf8')
+
+            return f, linenum
+
+        except:
+            f = open(f_name, 'r')
+            while f.readline(): linenum+=1
+            f.close()
+            f = open(f_name, 'r')
+
+            return f, linenum
+
+    f = open(f_name, 'r', encoding=encoding)
+    while f.readline(): linenum+=1
+    f.close()
+    f = open(f_name, 'r')
+
+    return f, linenum
+
+def Analyze(f_name, line_analyze=None, mode=None, encoding=None):
     '''
     Analyze kakaoTalk text. input parameter is file io or string.
     It returns Chatroom instance.
@@ -17,9 +48,8 @@ def Analyze(data_in, line_num=None, line_analyze=None, mode=None):
     line = True
     queue = []
 
-    if type(data_in) == str:
-        from io import StringIO
-        data_in = StringIO(data_in)
+    # File Open
+    data_in, line_num = open_file(f_name, encoding)
 
     # Select Mode
     if mode:
