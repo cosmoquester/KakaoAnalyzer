@@ -51,13 +51,15 @@ def select_mode(f_name, encoding):
 
     raise Exception('Cannot find file mode!')
 
-def Analyze(f_name, line_analyze=None, encoding=None, preprocessor=None):
+def Analyze(f_name, line_analyze=None, encoding=None, preprocessor=None, merge=False):
     '''
     Analyze kakaoTalk text. input parameter is file path.
     'line_analyze' parameter is for spliting words. basic is space spliter.
     you can use kkma analzyer, 'kkma' parameter or you can use your own function.
     encoding is file open encoding option.
     If you want to preprocess message content, you can use preprocessor which should be your own function.
+    If you want to merge contemporary timed messages, you can pass 'merge=True', 
+    Then the messages will be merged like one message.
 
     It returns Chatroom instance.
     '''
@@ -65,6 +67,9 @@ def Analyze(f_name, line_analyze=None, encoding=None, preprocessor=None):
     # Variables, queue is for multiline message.
     loop = 0
     date = None
+    date_prev = datetime(1, 1, 1)
+    name = ''
+    name_prev = ''
     chatname = None
     line = True
     queue = []
@@ -119,7 +124,9 @@ def Analyze(f_name, line_analyze=None, encoding=None, preprocessor=None):
         # The case this line is new date.
         if m_date:
             # Excute
-            if len(queue):
+            if len(queue) and not merge:
+                if preprocessor:
+                    queue[0][2] = preprocessor(queue[0][2])
                 chatroom.append(*queue[0])
                 del queue[0]
             # Update date
@@ -127,13 +134,7 @@ def Analyze(f_name, line_analyze=None, encoding=None, preprocessor=None):
 
         # The case this line is new message.
         elif m_message:
-            # Excute
-            if len(queue):
-                if preprocessor:
-                    queue[0][2] = preprocessor(queue[0][2])
-                chatroom.append(*queue[0])
-                del queue[0]
-
+            name_prev = name
             name = m_message.group('name')
             afm = m_message.group('afm')
             hour = int(m_message.group('hour'))
@@ -142,10 +143,22 @@ def Analyze(f_name, line_analyze=None, encoding=None, preprocessor=None):
 
             if afm == '오후' and hour != 12:
                 hour += 12
+            date_prev = date
             date = date.replace(hour=hour, minute=minute)
 
-            # Enqueue
-            queue.append([date, name, content])
+            if merge and name == name_prev and (date-date_prev).seconds <= 60:
+                queue[-1][2] += '\n' + content
+
+            else:
+                # Excute
+                if len(queue):
+                    if preprocessor:
+                        queue[0][2] = preprocessor(queue[0][2])
+                    chatroom.append(*queue[0])
+                    del queue[0]
+
+                # Enqueue
+                queue.append([date, name, content])
 
         # The case this line is addition string of last message.
         elif len(queue) and not etc_exp.match(line):
@@ -157,6 +170,8 @@ def Analyze(f_name, line_analyze=None, encoding=None, preprocessor=None):
     
     # Last Dequeuing
     if len(queue):
+        if preprocessor:
+            queue[0][2] = preprocessor(queue[0][2])
         chatroom.append(*queue[0])
 
     data_in.close()
