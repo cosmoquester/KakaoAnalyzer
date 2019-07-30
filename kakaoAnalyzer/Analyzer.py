@@ -51,13 +51,16 @@ def select_mode(f_name, encoding):
 
     raise Exception('Cannot find file mode!')
 
-def Analyze(f_name, line_analyze=None, encoding=None, preprocessor=None, merge=False):
+def Analyze(f_name, line_analyze=None, encoding=None, preprocessor=None, line_filter=None, msg_filter=None, merge=False):
     '''
     Analyze kakaoTalk text. input parameter is file path.
     'line_analyze' parameter is for spliting words. basic is space spliter.
     you can use kkma analzyer, 'kkma' parameter or you can use your own function.
     encoding is file open encoding option.
     If you want to preprocess message content, you can use preprocessor which should be your own function.
+    If you want to filter some messages like deleted message, you can use 'line_filter' parameter.
+    'line_filter' should be a function that returns true when the message should be filtered.
+    'msg_filter' is similar to 'line_filter', but 'msg_filter' filter only for message content not for a whole line.
     If you want to merge contemporary timed messages, you can pass 'merge=True', 
     Then the messages will be merged like one message.
 
@@ -121,48 +124,52 @@ def Analyze(f_name, line_analyze=None, encoding=None, preprocessor=None, merge=F
         m_date = datetime_exp.match(line)
         m_message = message_exp.match(line)
 
-        # The case this line is new date.
-        if m_date:
-            # Excute
-            if len(queue) and not merge:
-                if preprocessor:
-                    queue[0][2] = preprocessor(queue[0][2])
-                chatroom.append(*queue[0])
-                del queue[0]
-            # Update date
-            date = datetime(int(m_date.group('year')), int(m_date.group('month')), int(m_date.group('day')))
+        # Only unfiltered Message
+        if not (line_filter and line_filter(line)):
 
-        # The case this line is new message.
-        elif m_message:
-            name_prev = name
-            name = m_message.group('name')
-            afm = m_message.group('afm')
-            hour = int(m_message.group('hour'))
-            minute = int(m_message.group('min'))
-            content = m_message.group('con')
-
-            if afm == '오후' and hour != 12:
-                hour += 12
-            date_prev = date
-            date = date.replace(hour=hour, minute=minute)
-
-            if merge and name == name_prev and (date-date_prev).seconds <= 60:
-                queue[-1][2] += '\n' + content
-
-            else:
+            # The case this line is new date.
+            if m_date:
                 # Excute
-                if len(queue):
+                if len(queue) and not merge:
                     if preprocessor:
                         queue[0][2] = preprocessor(queue[0][2])
                     chatroom.append(*queue[0])
                     del queue[0]
+                # Update date
+                date = datetime(int(m_date.group('year')), int(m_date.group('month')), int(m_date.group('day')))
 
-                # Enqueue
-                queue.append([date, name, content])
+            # The case this line is new message.
+            elif m_message:
+                name_prev = name
+                name = m_message.group('name')
+                afm = m_message.group('afm')
+                hour = int(m_message.group('hour'))
+                minute = int(m_message.group('min'))
+                content = m_message.group('con')
 
-        # The case this line is addition string of last message.
-        elif len(queue) and not etc_exp.match(line):
-            queue[-1][2] += '\n' + line
+                if afm == '오후' and hour != 12:
+                    hour += 12
+                if not (msg_filter and msg_filter(content)):
+                    date_prev = date
+                    date = date.replace(hour=hour, minute=minute)
+
+                    if merge and name == name_prev and (date-date_prev).seconds <= 60:
+                        queue[-1][2] += '\n' + content
+
+                    else:
+                        # Excute
+                        if len(queue):
+                            if preprocessor:
+                                queue[0][2] = preprocessor(queue[0][2])
+                            chatroom.append(*queue[0])
+                            del queue[0]
+
+                        # Enqueue
+                        queue.append([date, name, content])
+
+            # The case this line is addition string of last message.
+            elif len(queue) and not etc_exp.match(line):
+                queue[-1][2] += '\n' + line
 
         pbar.update(1)
     
