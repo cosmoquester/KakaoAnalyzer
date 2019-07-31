@@ -126,3 +126,21 @@ class Chatroom:
                     w += '다'
                 ret[w] = ret.get(w, 0) + 1
         return ret
+
+    def export(self, fname=None, encoding='utf8', delimiter=','):
+        ''' Export Chatroom to CSV File '''
+        from csv import writer
+
+        if not fname:
+            fname = self.name + '.csv'
+
+        f = open(fname, 'w', encoding=encoding)
+        wr = writer(f, delimiter=delimiter)
+        wr.writerow(('Datetime', 'Name', 'Content'))
+
+        tot_msgs = self.get_total_msgs()
+        for msg in tot_msgs:
+            wr.writerow((msg.datetime.strftime('%Y-%m-%d %H:%M'), msg.person.name, msg.content))
+        f.close()
+
+        print(fname, "Saved.")
