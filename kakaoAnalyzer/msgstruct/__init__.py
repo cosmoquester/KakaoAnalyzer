@@ -1,4 +1,4 @@
-from .Chatroom import Chatroom
+from .Chatroom import Chatroom, export_data
 from .Person import Person, People
 from .Message import Message, Msgs
 from .TalkDay import TalkDay

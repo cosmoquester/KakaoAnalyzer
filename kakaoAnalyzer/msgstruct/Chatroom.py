@@ -3,6 +3,28 @@ from .Message import Message, Msgs
 from .TalkDay import TalkDay
 from .Word import Word, Words
 
+def export_data(fname, data=None, raw_data=None, encoding='utf8', delimiter=','):
+    ''' 
+    Export Chatroom to CSV File.
+    You can export using list or iterator of messages by pass in 'data' parameter.
+    You can also export to CSV using 'raw_data' parameter. 
+    When you pass raw_data like [ (msg, id, name ), (...), ...], It'll write tuples in list raw by raw.
+    '''
+    from csv import writer
+
+    f = open(fname, 'w', encoding=encoding)
+    wr = writer(f, delimiter=delimiter)
+
+    if data:
+        wr.writerow(('Datetime', 'Name', 'Content'))
+        for msg in data:
+            wr.writerow((msg.datetime.strftime('%Y-%m-%d %H:%M'), msg.person.name, msg.content))
+    elif raw_data:
+        for line in raw_data:
+            wr.writerow(line)
+    f.close()
+
+    print(fname, "Saved.")
 
 class Chatroom:
     ''' Chatroom is a class having information about Msgs and People in a chatroom. '''
@@ -135,18 +157,7 @@ class Chatroom:
 
     def export(self, fname=None, encoding='utf8', delimiter=','):
         ''' Export Chatroom to CSV File '''
-        from csv import writer
 
         if not fname:
             fname = self.name + '.csv'
-
-        f = open(fname, 'w', encoding=encoding)
-        wr = writer(f, delimiter=delimiter)
-        wr.writerow(('Datetime', 'Name', 'Content'))
-
-        tot_msgs = self.get_total_msgs()
-        for msg in tot_msgs:
-            wr.writerow((msg.datetime.strftime('%Y-%m-%d %H:%M'), msg.person.name, msg.content))
-        f.close()
-
-        print(fname, "Saved.")
+        export_data(fname, self.get_total_iter(), encoding=encoding, delimiter=delimiter)
