@@ -159,5 +159,5 @@ class Chatroom:
         ''' Export Chatroom to CSV File '''
 
         if not fname:
-            fname = self.name + '.csv'
+            fname = self.name + '_exported.csv'
         export_data(fname, self.get_total_iter(), encoding=encoding, delimiter=delimiter)

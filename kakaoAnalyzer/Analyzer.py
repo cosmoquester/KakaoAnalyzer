@@ -43,13 +43,50 @@ def select_mode(f_name, encoding):
     android_exp = '\d{4}년 \d{1,2}월 \d{1,2}일 (?P<afm>..) (?P<hour>\d{1,2}):(?P<min>\d{2}), (?P<name>.+?) : (?P<con>.+)'
     windows_exp = '\[(?P<name>.+?)\] \[(?P<afm>..) (?P<hour>\d{1,2}):(?P<min>\d{2})\] (?P<con>.+)'
     ios_exp = '(?P<year>\d{4}). (?P<month>\d{1,2}). (?P<day>\d{1,2}). (?P<afm>..) (?P<hour>\d{1,2}):(?P<min>\d{1,2}), (?P<name>.+?) : (?P<con>.+?)\r?\n?'
-    exps = (None, android_exp, windows_exp, ios_exp)
+    mac_exp = '(?P<year>\d{4})-(?P<month>\d{1,2})-(?P<day>\d{1,2}) (?P<hour>\d{1,2}):(?P<min>\d{1,2}):(?P<sec>\d{1,2}),"(?P<name>.+)","(?P<con>.+)"\r?\n?'
+    imp_exp = '(?P<year>\d{4})-(?P<month>\d{1,2})-(?P<day>\d{1,2}) (?P<hour>\d{1,2}):(?P<min>\d{1,2}),"(?P<name>.+)","(?P<con>.+)"\r?\n?'
+    exps = (None, android_exp, windows_exp, ios_exp, mac_exp, imp_exp)
 
-    for mode in range(1,4):
+    for mode in range(1,6):
         if search(exps[mode], lines):
             return mode
 
     raise Exception('Cannot find file mode!')
+
+def import_from_csv(f_name, encoding=None, line_analyze=None, preprocessor=None, msg_filter=None, merge=False, date_exp='%Y-%m-%d %H:%M'):
+
+    from csv import reader
+
+    # File Open
+    data_in, linenum  = open_file(f_name, encoding)
+    rdr = reader(data_in)
+    next(rdr)
+
+    # Set Chatname
+    chatname = f_name[:f_name.rfind('.')]
+
+    # Check Text lines
+    pbar = tqdm(total=linenum-1)
+    chatroom = Chatroom(chatname, line_analyze)
+
+    for date, name, content in rdr:
+        # Filtering
+        if msg_filter and msg_filter(content):
+            pbar.update(1)
+            continue
+
+        date = datetime.strptime(date, date_exp)
+
+        # Preprocess
+        if preprocessor:
+            content = preprocessor(content)
+
+        chatroom.append(date, name, content)
+        pbar.update(1)
+
+    pbar.close()
+    return chatroom
+
 
 def Analyze(f_name, line_analyze=None, encoding=None, preprocessor=None, line_filter=None, msg_filter=None, merge=False):
     '''
@@ -92,7 +129,7 @@ def Analyze(f_name, line_analyze=None, encoding=None, preprocessor=None, line_fi
         chatname = chatname.group(1,2)
         chatname = chatname[0] if chatname[0] else chatname[1]
     else:
-        chatname = line
+        chatname = f_name.split('.')[0] + '_Analyzed'
 
     # Android
     if mode == 1:
@@ -112,6 +149,15 @@ def Analyze(f_name, line_analyze=None, encoding=None, preprocessor=None, line_fi
         datetime_exp = compile('(?P<year>\d{4})년 (?P<month>\d{1,2})월 (?P<day>\d{1,2})일 .요일\r?\n?')
         message_exp = compile('(?P<year>\d{4}). (?P<month>\d{1,2}). (?P<day>\d{1,2}). (?P<afm>..) (?P<hour>\d{1,2}):(?P<min>\d{1,2}), (?P<name>.+?) : (?P<con>.+?)\r?\n?$')
         etc_exp = compile('\d{4}. \d{1,2}. \d{1,2}. .. \d{1,2}:\d{1,2}: .+')
+
+    # Mac 
+    elif mode == 4:
+        return import_from_csv(f_name, encoding=encoding, preprocessor=preprocessor, date_exp='%Y-%m-%d %H:%M:%S')
+
+    # Imported
+    elif mode == 5:
+        return import_from_csv(f_name, encoding=encoding, preprocessor=preprocessor)
+
     chatroom = Chatroom(chatname, line_analyze)
 
     # Check Text lines
