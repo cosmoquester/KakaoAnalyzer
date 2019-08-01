@@ -81,17 +81,13 @@ def import_from_csv(f_name, encoding=None, line_analyze=None, preprocessor=None,
     queue = []
 
     for date, name, content in rdr:
-        pbar.update(1)
+        pbar.update(content.count('\n') + 1)
 
         # Filtering
         if msg_filter and msg_filter(content):
             continue
 
         date = datetime.strptime(date, date_exp)
-
-        # Preprocess
-        if preprocessor:
-            content = preprocessor(content)
 
         # Merge Message content to last
         if merge and queue and queue[-1][1]==name and (date-date_prev).seconds <= 60:
@@ -100,6 +96,10 @@ def import_from_csv(f_name, encoding=None, line_analyze=None, preprocessor=None,
             continue
         
         if queue:
+            
+            # Preprocess
+            if preprocessor:
+                queue[0][2] = preprocessor(queue[0][2])
             chatroom.append(*queue[0])
             del queue[0]
 
@@ -240,7 +240,8 @@ def Analyze(f_name, line_analyze=None, encoding=None, preprocessor=None, line_fi
             elif len(queue) and not etc_exp.match(line):
                 queue[-1][2] += '\n' + line
 
-        pbar.update(1)
+        interval = content.count('\n') + 1 if m_message else 1
+        pbar.update(interval)
     
     pbar.close()
     
