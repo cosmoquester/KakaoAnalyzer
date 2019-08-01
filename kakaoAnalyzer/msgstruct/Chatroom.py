@@ -16,7 +16,7 @@ def export_data(fname, data=None, raw_data=None, encoding='utf8', delimiter=',')
     wr = writer(f, delimiter=delimiter)
 
     if data:
-        wr.writerow(('Datetime', 'Name', 'Content'))
+        wr.writerow(('Date', 'User', 'Message'))
         for msg in data:
             wr.writerow((msg.datetime.strftime('%Y-%m-%d %H:%M'), msg.person.name, msg.content))
     elif raw_data:
