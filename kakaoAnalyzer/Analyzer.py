@@ -193,7 +193,8 @@ def Analyze(f_name, line_analyze=None, encoding=None, preprocessor=None, line_fi
                 minute = int(m_message.group('min'))
                 content = m_message.group('con')
 
-                if afm == '오후' and hour != 12:
+                hour = hour if hour != 12 else 0
+                if afm == '오후':
                     hour += 12
                 if not (msg_filter and msg_filter(content)):
                     date_prev = date
