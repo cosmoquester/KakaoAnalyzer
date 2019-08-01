@@ -43,8 +43,8 @@ def select_mode(f_name, encoding):
     android_exp = '\d{4}년 \d{1,2}월 \d{1,2}일 (?P<afm>..) (?P<hour>\d{1,2}):(?P<min>\d{2}), (?P<name>.+?) : (?P<con>.+)'
     windows_exp = '\[(?P<name>.+?)\] \[(?P<afm>..) (?P<hour>\d{1,2}):(?P<min>\d{2})\] (?P<con>.+)'
     ios_exp = '(?P<year>\d{4}). (?P<month>\d{1,2}). (?P<day>\d{1,2}). (?P<afm>..) (?P<hour>\d{1,2}):(?P<min>\d{1,2}), (?P<name>.+?) : (?P<con>.+?)\r?\n?'
-    mac_exp = '(?P<year>\d{4})-(?P<month>\d{1,2})-(?P<day>\d{1,2}) (?P<hour>\d{1,2}):(?P<min>\d{1,2}):(?P<sec>\d{1,2}),"(?P<name>.+)","(?P<con>.+)"\r?\n?'
-    imp_exp = '(?P<year>\d{4})-(?P<month>\d{1,2})-(?P<day>\d{1,2}) (?P<hour>\d{1,2}):(?P<min>\d{1,2}),"(?P<name>.+)","(?P<con>.+)"\r?\n?'
+    mac_exp = '(?P<year>\d{4})-(?P<month>\d{1,2})-(?P<day>\d{1,2}) (?P<hour>\d{1,2}):(?P<min>\d{1,2}):(?P<sec>\d{1,2}),(?P<name>.+),(?P<con>.+)\r?\n?'
+    imp_exp = '(?P<year>\d{4})-(?P<month>\d{1,2})-(?P<day>\d{1,2}) (?P<hour>\d{1,2}):(?P<min>\d{1,2}),(?P<name>.+),(?P<con>.+)\r?\n?'
     exps = (None, android_exp, windows_exp, ios_exp, mac_exp, imp_exp)
 
     for mode in range(1,6):
@@ -54,7 +54,16 @@ def select_mode(f_name, encoding):
     raise Exception('Cannot find file mode!')
 
 def import_from_csv(f_name, encoding=None, line_analyze=None, preprocessor=None, msg_filter=None, merge=False, date_exp='%Y-%m-%d %H:%M'):
-
+    '''
+    This function works like Analyze function, but for csv files.
+    f_name: file path to open.
+    encoding: file open encoding.
+    line_analyze: Function to analyze sentence to words.
+    preprocessor: preprocessor function for messages.
+    msg_filter: function to filter some messages.
+    merge: concurrent messages merge as one message. True / False parameter.
+    date_exp: datetime expression in the file like '%Y-%m-%d %H:%M'.
+    '''
     from csv import reader
 
     # File Open
@@ -68,11 +77,14 @@ def import_from_csv(f_name, encoding=None, line_analyze=None, preprocessor=None,
     # Check Text lines
     pbar = tqdm(total=linenum-1)
     chatroom = Chatroom(chatname, line_analyze)
+    date_prev = datetime(1,1,1)
+    queue = []
 
     for date, name, content in rdr:
+        pbar.update(1)
+
         # Filtering
         if msg_filter and msg_filter(content):
-            pbar.update(1)
             continue
 
         date = datetime.strptime(date, date_exp)
@@ -81,8 +93,18 @@ def import_from_csv(f_name, encoding=None, line_analyze=None, preprocessor=None,
         if preprocessor:
             content = preprocessor(content)
 
-        chatroom.append(date, name, content)
-        pbar.update(1)
+        # Merge Message content to last
+        if merge and queue and queue[-1][1]==name and (date-date_prev).seconds <= 60:
+            date_prev = date
+            queue[-1][2] += '\n' + content
+            continue
+        
+        if queue:
+            chatroom.append(*queue[0])
+            del queue[0]
+
+        date_prev = date
+        queue.append((date, name, content))
 
     pbar.close()
     return chatroom
